@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ResultsList from '../components/ResultsList';
+import { People } from '../types/types';
 
 interface State {
-  results: { name: string; description: string }[];
+  results: People[];
   hasError: boolean;
 }
 
@@ -20,12 +22,12 @@ class MainPage extends Component<Record<string, never>, State> {
   }
 
   fetchData = () => {
-    const apiUrl = 'https://swapi.dev/api/planets/';
+    const apiUrl = 'https://swapi.dev/api/people/';
     axios
       .get(apiUrl)
       .then((response) => {
-        this.setState({ results: response.data.results });
-        console.log(response);
+        const results = response.data.results as People[];
+        this.setState({ results });
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -39,7 +41,7 @@ class MainPage extends Component<Record<string, never>, State> {
     }
     return (
       <div>
-        <p>Hello</p>
+        <ResultsList results={this.state.results} />
       </div>
     );
   }
