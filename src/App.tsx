@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
+import MainPage from './pages/MainPage';
 
-function App() {
-  return (
-    <>
-      <p className="read-the-docs">App</p>
-    </>
-  );
+class App extends Component {
+  render() {
+    return <MainPage />;
+  }
 }
 
 export default App;
