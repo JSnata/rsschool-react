@@ -19,11 +19,14 @@ class MainPage extends Component<Record<string, never>, State> {
   }
 
   componentDidMount() {
-    this.fetchData('');
+    const searchQuery = localStorage.getItem('searchQuery') || '';
+    this.fetchData(searchQuery);
   }
 
   fetchData = (query: string) => {
-    const url = query ? `https://swapi.dev/api/people/?search=${query}` : 'https://swapi.dev/api/people/';
+    const url = query
+      ? `https://swapi.dev/api/people/?search=${query}`
+      : 'https://swapi.dev/api/people/';
     axios
       .get(url)
       .then((response) => {
