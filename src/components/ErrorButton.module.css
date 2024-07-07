@@ -1,0 +1,17 @@
+.errorButton {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .errorButton:hover {
+    background-color: darkred;
+  }
+  
+  .error {
+    color: red;
+    font-size: 24px;
+    text-align: center;
+  }

@@ -4,6 +4,7 @@ import ResultsList from '../components/ResultsList';
 import { People } from '../types/types';
 import Search from '../components/Search';
 import styles from './MainPage.module.css';
+import ErrorButton from '../components/ErrorButton';
 
 interface State {
   results: People[];
@@ -52,6 +53,7 @@ class MainPage extends Component<Record<string, never>, State> {
       <div className={styles.container}>
         <Search searchHandler={this.searchHandler} />
         <ResultsList results={this.state.results} />
+        <ErrorButton />
       </div>
     );
   }
