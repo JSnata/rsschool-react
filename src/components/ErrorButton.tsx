@@ -14,7 +14,7 @@ class ErrorButton extends Component<Record<string, never>, State> {
   }
 
   componentDidUpdate() {
-    if(this.state.hasError) {
+    if (this.state.hasError) {
       throw new Error('Error boundary wrapper works! Test error occured');
     }
   }
