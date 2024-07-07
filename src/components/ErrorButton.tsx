@@ -13,20 +13,17 @@ class ErrorButton extends Component<Record<string, never>, State> {
     };
   }
 
-  throwError = () => {
-    try {
+  componentDidUpdate() {
+    if(this.state.hasError) {
       throw new Error('Error boundary wrapper works! Test error occured');
-    } catch (error) {
-      console.error('Error thrown:', error);
-      this.setState({ hasError: true });
     }
+  }
+
+  throwError = () => {
+    this.setState({ hasError: true });
   };
 
   render() {
-    if (this.state.hasError) {
-      return <h1 className={styles.error}>Test error. Fallback content is here.</h1>;
-    }
-
     return (
       <button className={styles.errorButton} onClick={this.throwError}>
         New Error!
