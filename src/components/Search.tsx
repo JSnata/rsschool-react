@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './Search.module.css';
 
 interface Props {
   searchHandler: (query: string) => void;
@@ -27,13 +28,16 @@ class SearchComponent extends Component<Props, State> {
 
   render() {
     return (
-      <div>
+      <div className={styles.container}>
         <input
           type="text"
           value={this.state.searchQuery}
           onChange={this.handleInputChange}
+          className={styles.searchInput}
         />
-        <button onClick={this.handleSearch}>Search</button>
+        <button onClick={this.handleSearch} className={styles.searchButton}>
+          Search
+        </button>
       </div>
     );
   }

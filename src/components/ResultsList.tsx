@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { People } from '../types/types';
+import styles from './ResultsList.module.css';
 
 interface Props {
   results: People[];
@@ -8,10 +9,10 @@ interface Props {
 class ResultsList extends Component<Props> {
   render() {
     return (
-      <div>
+      <div className={styles.container}>
         {this.props.results.map((person, index) => (
-          <div key={index}>
-            <h3>{person.name}</h3>
+          <div key={index} className={styles.resultItem}>
+            <h3>Name: {person.name}</h3>
             <p>Birth Year: {person.birth_year}</p>
             <p>Eye Color: {person.eye_color}</p>
             <p>Gender: {person.gender}</p>

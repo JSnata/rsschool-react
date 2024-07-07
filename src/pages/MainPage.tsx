@@ -3,6 +3,7 @@ import axios from 'axios';
 import ResultsList from '../components/ResultsList';
 import { People } from '../types/types';
 import Search from '../components/Search';
+import styles from './MainPage.module.css';
 
 interface State {
   results: People[];
@@ -45,10 +46,10 @@ class MainPage extends Component<Record<string, never>, State> {
 
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
+      return <h1 className={styles.error}>Something went wrong.</h1>;
     }
     return (
-      <div>
+      <div className={styles.container}>
         <Search searchHandler={this.searchHandler} />
         <ResultsList results={this.state.results} />
       </div>
