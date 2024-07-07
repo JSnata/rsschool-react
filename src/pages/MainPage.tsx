@@ -8,6 +8,7 @@ import ErrorButton from '../components/ErrorButton';
 
 interface State {
   results: People[];
+  loading: boolean;
   hasError: boolean;
 }
 
@@ -16,6 +17,7 @@ class MainPage extends Component<Record<string, never>, State> {
     super(props);
     this.state = {
       results: [],
+      loading: false, 
       hasError: false,
     };
   }
@@ -26,6 +28,8 @@ class MainPage extends Component<Record<string, never>, State> {
   }
 
   fetchData = (query: string) => {
+    this.setState({ loading: true });
+
     const url = query
       ? `https://swapi.dev/api/people/?page=1&search=${query}`
       : 'https://swapi.dev/api/people/?page=1';
@@ -33,11 +37,11 @@ class MainPage extends Component<Record<string, never>, State> {
       .get(url)
       .then((response) => {
         const results = response.data.results as People[];
-        this.setState({ results });
+        this.setState({ results, loading: false });
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        this.setState({ hasError: true });
+        this.setState({ hasError: true, loading: false });
       });
   };
 
@@ -46,13 +50,17 @@ class MainPage extends Component<Record<string, never>, State> {
   };
 
   render() {
-    if (this.state.hasError) {
+    const { results, loading, hasError } = this.state;
+
+    if (hasError) {
       return <h1 className={styles.error}>Something went wrong.</h1>;
     }
     return (
       <div className={styles.container}>
         <Search searchHandler={this.searchHandler} />
-        <ResultsList results={this.state.results} />
+        {loading && <h2>Loading....</h2>}
+        {!loading && !results.length && <p>No results found.</p>}
+        {!loading && results.length && <ResultsList results={results} />}
         <ErrorButton />
       </div>
     );
