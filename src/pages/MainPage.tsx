@@ -26,8 +26,8 @@ class MainPage extends Component<Record<string, never>, State> {
 
   fetchData = (query: string) => {
     const url = query
-      ? `https://swapi.dev/api/people/?search=${query}`
-      : 'https://swapi.dev/api/people/';
+      ? `https://swapi.dev/api/people/?page=1&search=${query}`
+      : 'https://swapi.dev/api/people/?page=1';
     axios
       .get(url)
       .then((response) => {
