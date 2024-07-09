@@ -17,7 +17,7 @@ class MainPage extends Component<Record<string, never>, State> {
     super(props);
     this.state = {
       results: [],
-      loading: false, 
+      loading: false,
       hasError: false,
     };
   }
