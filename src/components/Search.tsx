@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './Search.module.css';
+import useSearchQuery from '../customHooks/useSearchQuery';
 
 interface Props {
   searchHandler: (query: string) => void;
 }
 
 const SearchComponent = (props: Props) => {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
-  useEffect(() => {
-    const savedSearchQuery = localStorage.getItem('searchQuery') || '';
-    setSearchQuery(savedSearchQuery);
-  }, []);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
+  const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
 
   const handleSearch = () => {
     const trimmedQuery = searchQuery.trim();
-    localStorage.setItem('searchQuery', trimmedQuery);
     props.searchHandler(trimmedQuery);
   };
 
@@ -28,7 +19,7 @@ const SearchComponent = (props: Props) => {
       <input
         type="text"
         value={searchQuery}
-        onChange={handleInputChange}
+        onChange={(event) => setSearchQuery(event.target.value)}
         className={styles.searchInput}
       />
       <button onClick={handleSearch} className={styles.searchButton}>
