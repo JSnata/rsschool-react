@@ -5,23 +5,27 @@ import { People } from '../types/types';
 import Search from '../components/Search';
 import styles from './MainPage.module.css';
 import ErrorButton from '../components/ErrorButton';
+import Pagination from '../components/Pagination';
 
 const MainPage = () => {
   const [results, setResults] = useState<People[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [count, setCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchData = (query: string) => {
+  const fetchData = (page: number = 1, query: string = '') => {
     setLoading(true);
     const url = query
-      ? `https://swapi.dev/api/people/?page=1&search=${query}`
-      : 'https://swapi.dev/api/people/?page=1';
+      ? `https://swapi.dev/api/people/?page=${page}&search=${query}`
+      : `https://swapi.dev/api/people/?page=${page}`;
 
     axios
       .get(url)
       .then((response) => {
         const results = response.data.results as People[];
         setResults(results);
+        setCount(response.data.count);
         setLoading(false);
       })
       .catch((error) => {
@@ -33,11 +37,16 @@ const MainPage = () => {
 
   useEffect(() => {
     const searchQuery = localStorage.getItem('searchQuery') || '';
-    fetchData(searchQuery);
-  }, []);
+    fetchData(currentPage, searchQuery);
+  }, [currentPage]);
 
   const searchHandler = (query: string) => {
-    fetchData(query);
+    setCurrentPage(1);
+    fetchData(1, query);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   if (hasError) {
@@ -50,6 +59,13 @@ const MainPage = () => {
       {loading && <h2>Loading....</h2>}
       {!loading && !results.length && <p>No results found.</p>}
       {!loading && results.length && <ResultsList results={results} />}
+      {!loading && results.length && (
+        <Pagination
+          totalItemsCount={count}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
       <ErrorButton />
     </div>
   );
