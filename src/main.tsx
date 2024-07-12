@@ -3,14 +3,20 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
 import ErrorPage from './pages/ErrorPage.tsx';
+import ItemDetails from './components/ItemDetails.tsx';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '*',
     element: <App />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: 'details/:id',
+        element: <ItemDetails />,
+      },
+    ],
   },
 ]);
 
