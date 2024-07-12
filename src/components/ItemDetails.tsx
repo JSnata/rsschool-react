@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { People } from '../types/types';
 import styles from './ItemDetails.module.css';
+import { DetailsContext } from '../App';
 
 const ItemDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [details, setDetails] = useState<People | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { hideDetails } = useContext(DetailsContext);
+  const [searchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   useEffect(() => {
     if (id) {
@@ -27,7 +31,8 @@ const ItemDetails = () => {
   }, [id]);
 
   const handleClose = () => {
-    navigate('/');
+    hideDetails();
+    navigate(`/?page=${currentPage}`);
   };
 
   if (loading) {

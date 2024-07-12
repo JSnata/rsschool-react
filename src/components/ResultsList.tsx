@@ -18,7 +18,7 @@ const ResultsList = ({ results, onItemClick }: Props) => {
             onItemClick(person.url.split('/').filter(Boolean).pop()!)
           }
         >
-          <h3>Name: {person.name}</h3>
+          <h3>{person.name}</h3>
         </button>
       ))}
     </div>

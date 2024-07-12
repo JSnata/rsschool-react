@@ -8,13 +8,21 @@ import styles from './MainPage.module.css';
 import Pagination from '../components/Pagination';
 import useSearchQuery from '../customHooks/useSearchQuery';
 
-const MainPage = () => {
+interface MainPageProps {
+  detailsOpened: boolean;
+  hideDetails: () => void;
+  showDetails: () => void;
+}
+
+const MainPage = ({
+  detailsOpened,
+  hideDetails,
+  showDetails,
+}: MainPageProps) => {
   const [results, setResults] = useState<People[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [count, setCount] = useState(0);
-  const [itemId, setItemId] = useState('');
-  const [detailsOpened, setdetailsOpened] = useState(false);
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -58,9 +66,19 @@ const MainPage = () => {
   };
 
   const handleItemClick = (id: string) => {
-    setItemId(id);
-    navigate(`/details/${id}`);
-    setdetailsOpened(!detailsOpened);
+    navigate(`details/${id}?page=${currentPage}`);
+    showDetails();
+  };
+
+  const handleClose = () => {
+    navigate(`/?page=${currentPage}`);
+    hideDetails();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleClose();
+    }
   };
 
   if (hasError) {
@@ -69,7 +87,13 @@ const MainPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.searchWrapper}>
+      <div
+        className={styles.searchWrapper}
+        onClick={detailsOpened ? handleClose : undefined}
+        onKeyDown={detailsOpened ? handleKeyDown : undefined}
+        role="button"
+        tabIndex={0}
+      >
         <Search searchHandler={searchHandler} />
         {loading && <h2>Loading....</h2>}
         {!loading && !results.length && <p>No results found.</p>}
@@ -84,7 +108,11 @@ const MainPage = () => {
           />
         )}
       </div>
-      <div className={styles.detailsWrapper}>{itemId && <Outlet />}</div>
+      {detailsOpened && (
+        <div className={styles.detailsWrapper}>
+          <Outlet />
+        </div>
+      )}
     </div>
   );
 };
