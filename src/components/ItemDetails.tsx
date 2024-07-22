@@ -1,19 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import styles from './ItemDetails.module.css';
-import { DetailsContext } from '../App';
+import { useDispatch, useSelector } from 'react-redux';
 import { itemsAPI } from '../services/ItemsService';
+import {
+  setSelectedItem,
+  setIsLoading,
+  setError,
+} from '../store/reducers/itemsSlice';
+import { RootState } from '../store/store';
+import styles from './ItemDetails.module.css';
 
 const ItemDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { hideDetails } = useContext(DetailsContext);
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
+
   const { data, error, isLoading } = itemsAPI.useFetchPersonByIdQuery(id);
 
+  const selectedItem = useSelector(
+    (state: RootState) => state.items.selectedItem,
+  );
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setSelectedItem(data));
+    }
+    if (isLoading !== undefined) {
+      dispatch(setIsLoading(isLoading));
+    }
+    if (error) {
+      dispatch(setError(error.toString()));
+    }
+  }, [data, isLoading, error, dispatch]);
+
   const handleClose = () => {
-    hideDetails();
     navigate(`/?page=${currentPage}`);
   };
 
@@ -21,11 +43,7 @@ const ItemDetails = () => {
     return <h3>Loading...</h3>;
   }
 
-  if (error) {
-    return <p>Error loading item details.</p>;
-  }
-
-  if (!data) {
+  if (!selectedItem) {
     return <p>Item not found.</p>;
   }
 
@@ -35,14 +53,14 @@ const ItemDetails = () => {
         Close
       </button>
       <h2>Details:</h2>
-      <h3>{data.name}</h3>
-      <p>Birth Year: {data.birth_year}</p>
-      <p>Eye Color: {data.eye_color}</p>
-      <p>Gender: {data.gender}</p>
-      <p>Hair Color: {data.hair_color}</p>
-      <p>Height: {data.height} cm</p>
-      <p>Mass: {data.mass} kg</p>
-      <p>Skin Color: {data.skin_color}</p>
+      <h3>{selectedItem.name}</h3>
+      <p>Birth Year: {selectedItem.birth_year}</p>
+      <p>Eye Color: {selectedItem.eye_color}</p>
+      <p>Gender: {selectedItem.gender}</p>
+      <p>Hair Color: {selectedItem.hair_color}</p>
+      <p>Height: {selectedItem.height} cm</p>
+      <p>Mass: {selectedItem.mass} kg</p>
+      <p>Skin Color: {selectedItem.skin_color}</p>
     </div>
   );
 };
