@@ -10,9 +10,9 @@ interface Props {
 const ResultsList = ({ results, onItemClick }: Props) => {
   return (
     <div className={styles.container}>
-      {results.map((person, index) => (
+      {results.map((person) => (
         <button
-          key={index}
+          key={person.url}
           className={styles.resultItem}
           onClick={() =>
             onItemClick(person.url.split('/').filter(Boolean).pop()!)

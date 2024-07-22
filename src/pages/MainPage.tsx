@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ResultsList from '../components/ResultsList';
-import { People } from '../types/types';
 import Search from '../components/Search';
 import styles from './MainPage.module.css';
 import Pagination from '../components/Pagination';
 import useSearchQuery from '../customHooks/useSearchQuery';
+import { itemsAPI } from '../services/ItemsService';
+import { setItems, setIsLoading, setError } from '../store/reducers/itemsSlice';
+import { RootState } from '../store/store';
 
 interface MainPageProps {
   detailsOpened: boolean;
@@ -19,46 +21,38 @@ const MainPage = ({
   hideDetails,
   showDetails,
 }: MainPageProps) => {
-  const [results, setResults] = useState<People[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [count, setCount] = useState(0);
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
-  const fetchData = (page: number = 1, query: string = '') => {
-    setLoading(true);
-    const url = query
-      ? `https://swapi.dev/api/people/?page=${page}&search=${query}`
-      : `https://swapi.dev/api/people/?page=${page}`;
+  const { data, error, isLoading } = itemsAPI.useFetchPeopleQuery(
+    { page: currentPage, search: searchQuery },
+    { skip: detailsOpened },
+  );
 
-    axios
-      .get(url)
-      .then((response) => {
-        const results = response.data.results as People[];
-        setResults(results);
-        setCount(response.data.count);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setHasError(true);
-        setLoading(false);
-      });
-  };
+  const items = useSelector((state: RootState) => state.items.items);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setItems(data.results));
+    }
+    if (isLoading !== undefined) {
+      dispatch(setIsLoading(isLoading));
+    }
+    if (error) {
+      dispatch(setError(error.toString()));
+    }
+  }, [data, isLoading, error, dispatch]);
 
   useEffect(() => {
     setSearchParams({ page: currentPage.toString() });
-    fetchData(currentPage, searchQuery);
-  }, [currentPage, searchQuery]);
+  }, [currentPage, setSearchParams]);
 
   const searchHandler = (query: string) => {
     setSearchQuery(query);
     setSearchParams({ page: '1' });
-    fetchData(1, query);
   };
 
   const handlePageChange = (page: number) => {
@@ -81,7 +75,7 @@ const MainPage = ({
     }
   };
 
-  if (hasError) {
+  if (error) {
     return <h1 className={styles.error}>Something went wrong.</h1>;
   }
 
@@ -95,17 +89,19 @@ const MainPage = ({
         tabIndex={0}
       >
         <Search searchHandler={searchHandler} />
-        {loading && <h2>Loading....</h2>}
-        {!loading && !results.length && <p>No results found.</p>}
-        {!loading && results.length && (
-          <ResultsList results={results} onItemClick={handleItemClick} />
+        {isLoading && <h2>Loading....</h2>}
+        {!isLoading && (!items || items.length === 0) && (
+          <p>No results found.</p>
         )}
-        {!loading && results.length && (
-          <Pagination
-            totalItemsCount={count}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
+        {!isLoading && items.length > 0 && (
+          <>
+            <ResultsList results={items} onItemClick={handleItemClick} />
+            <Pagination
+              totalItemsCount={data?.count || 0}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </div>
       {detailsOpened && (
@@ -116,4 +112,5 @@ const MainPage = ({
     </div>
   );
 };
+
 export default MainPage;

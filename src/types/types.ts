@@ -16,3 +16,8 @@ export interface People {
   created: string;
   edited: string;
 }
+
+export interface PeopleResponse {
+  results: People[];
+  count: number;
+}
