@@ -93,23 +93,44 @@ const MainPage = ({
         const itemId = item.url.split('/').filter(Boolean).pop();
         return selectedItems.includes(itemId!);
       })
-      .map((item) => {
-        return {
-          name: item.name,
-          birthYear: item.birth_year,
-          eyeColor: item.eye_color,
-          gender: item.gender,
-          hairColor: item.hair_color,
-          height: item.height,
-          mass: item.mass,
-          skinColor: item.skin_color,
-          url: item.url,
-        };
-      });
+      .map((item) => ({
+        name: item.name,
+        birthYear: item.birth_year,
+        eyeColor: item.eye_color,
+        gender: item.gender,
+        hairColor: item.hair_color,
+        height: item.height,
+        mass: item.mass,
+        skinColor: item.skin_color,
+        url: item.url,
+      }));
+
+    const escapeCsvField = (field: string) => {
+      if (field.includes('"') || field.includes(',') || field.includes('\n')) {
+        field = field.replace(/"/g, '""');
+        return `"${field}"`;
+      }
+      return field;
+    };
 
     let content = 'data:text/csv;charset=utf-8,';
+    const headerContent =
+      'name,birth year,eye color,gender,hair color,height,mass,skin color,url\n';
+    content += headerContent;
+
     selectedDetails.forEach((item) => {
-      const itemContent = `${item.name},${item.birthYear},${item.eyeColor},${item.gender},${item.hairColor},${item.height},${item.mass},${item.skinColor},${item.url}`;
+      const itemContent = [
+        escapeCsvField(item.name),
+        escapeCsvField(item.birthYear),
+        escapeCsvField(item.eyeColor),
+        escapeCsvField(item.gender),
+        escapeCsvField(item.hairColor),
+        escapeCsvField(item.height),
+        escapeCsvField(item.mass),
+        escapeCsvField(item.skinColor),
+        escapeCsvField(item.url),
+      ].join(',');
+
       content += itemContent + '\n';
     });
 
