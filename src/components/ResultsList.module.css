@@ -8,18 +8,17 @@
 .resultItem {
   text-align: center;
   border: 1px solid #ccc;
-  border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
   transition: all ease-in-out 0.3s;
 }
 
 .resultItem:hover {
-  transform: scale(1.2);
+  transform: scale(1.03);
 }
 
 .resultItem h3 {
   margin: 0;
-  color: burlywood;
+  color: #d7923f;
   margin-top: 0;
 }

@@ -7,7 +7,12 @@ import styles from './MainPage.module.css';
 import Pagination from '../components/Pagination';
 import useSearchQuery from '../customHooks/useSearchQuery';
 import { itemsAPI } from '../services/ItemsService';
-import { setItems, setIsLoading, setError } from '../store/reducers/itemsSlice';
+import {
+  setItems,
+  setIsLoading,
+  setError,
+  unselectAllItems,
+} from '../store/reducers/itemsSlice';
 import { RootState } from '../store/store';
 
 interface MainPageProps {
@@ -33,6 +38,9 @@ const MainPage = ({
   );
 
   const items = useSelector((state: RootState) => state.items.items);
+  const selectedItems = useSelector(
+    (state: RootState) => state.items.selectedItems,
+  );
 
   useEffect(() => {
     if (data) {
@@ -75,9 +83,44 @@ const MainPage = ({
     }
   };
 
-  if (error) {
-    return <h1 className={styles.error}>Something went wrong.</h1>;
-  }
+  const handleUnselectAll = () => {
+    dispatch(unselectAllItems());
+  };
+
+  const downloadHandler = () => {
+    const selectedDetails = items
+      .filter((item) => {
+        const itemId = item.url.split('/').filter(Boolean).pop();
+        return selectedItems.includes(itemId!);
+      })
+      .map((item) => {
+        return {
+          name: item.name,
+          birthYear: item.birth_year,
+          eyeColor: item.eye_color,
+          gender: item.gender,
+          hairColor: item.hair_color,
+          height: item.height,
+          mass: item.mass,
+          skinColor: item.skin_color,
+          url: item.url,
+        };
+      });
+
+    let content = 'data:text/csv;charset=utf-8,';
+    selectedDetails.forEach((item) => {
+      const itemContent = `${item.name},${item.birthYear},${item.eyeColor},${item.gender},${item.hairColor},${item.height},${item.mass},${item.skinColor},${item.url}`;
+      content += itemContent + '\n';
+    });
+
+    const encodedUri = encodeURI(content);
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('href', encodedUri);
+    downloadLink.setAttribute('download', `${selectedItems.length}_people.csv`);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
 
   return (
     <div className={styles.container}>
@@ -107,6 +150,13 @@ const MainPage = ({
       {detailsOpened && (
         <div className={styles.detailsWrapper}>
           <Outlet />
+        </div>
+      )}
+      {selectedItems.length > 0 && (
+        <div className={styles.flyout}>
+          <h3>{selectedItems.length} item(s) selected</h3>
+          <button onClick={handleUnselectAll}>Unselect all</button>
+          <button onClick={downloadHandler}>Download</button>
         </div>
       )}
     </div>

@@ -43,6 +43,9 @@ export const itemsSlice = createSlice({
         state.selectedItems.push(id);
       }
     },
+    unselectAllItems: (state) => {
+      state.selectedItems = [];
+    },
   },
 });
 
@@ -52,6 +55,7 @@ export const {
   setIsLoading,
   setError,
   toggleSelectedItem,
+  unselectAllItems,
 } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

@@ -22,3 +22,34 @@
   font-size: 20px;
   text-align: center;
 }
+
+.flyout {
+  position: fixed;
+  width: 30%;
+  bottom: 10px;
+  left: 65%;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #d7923f;
+  padding: 10px;
+  text-align: center;
+}
+
+.flyout p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.flyout button {
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #d7923f;
+  color: white;
+  border-radius: 0;
+}
+
+.flyout button:hover {
+  background-color: #b33000;
+}
