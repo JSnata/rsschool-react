@@ -67,3 +67,15 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.mainPage {
+  transition: all 0.3s ease;
+}
+
+.mainPage.light {
+  background-color: white;
+}
+
+.mainPage.dark {
+  background-color: black;
+}

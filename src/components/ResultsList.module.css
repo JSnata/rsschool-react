@@ -19,6 +19,23 @@
 
 .resultItem h3 {
   margin: 0;
-  color: #d7923f;
   margin-top: 0;
+}
+
+.resultItem.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.resultItem.light h3 {
+  color: #d7923f;
+}
+
+.resultItem.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.resultItem.dark h3 {
+  color: #f1c40f;
 }

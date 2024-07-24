@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ResultsList from '../components/ResultsList';
@@ -14,6 +14,8 @@ import {
   unselectAllItems,
 } from '../store/reducers/itemsSlice';
 import { RootState } from '../store/store';
+
+export const ThemeContext = createContext({ theme: 'light' });
 
 interface MainPageProps {
   detailsOpened: boolean;
@@ -31,6 +33,11 @@ const MainPage = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
 
   const { data, error, isLoading } = itemsAPI.useFetchPeopleQuery(
     { page: currentPage, search: searchQuery },
@@ -144,43 +151,48 @@ const MainPage = ({
   };
 
   return (
-    <div className={styles.container}>
-      <div
-        className={styles.searchWrapper}
-        onClick={detailsOpened ? handleClose : undefined}
-        onKeyDown={detailsOpened ? handleKeyDown : undefined}
-        role="button"
-        tabIndex={0}
-      >
-        <Search searchHandler={searchHandler} />
-        {isLoading && <h2>Loading....</h2>}
-        {!isLoading && (!items || items.length === 0) && (
-          <p>No results found.</p>
+    <ThemeContext.Provider value={{ theme }}>
+      <div className={`${styles.container} mainPage ${theme}`}>
+        <div
+          className={styles.searchWrapper}
+          onClick={detailsOpened ? handleClose : undefined}
+          onKeyDown={detailsOpened ? handleKeyDown : undefined}
+          role="button"
+          tabIndex={0}
+        >
+          <button onClick={toggleTheme} className={styles.toggleButton}>
+            {theme === 'light' ? 'Dark' : 'Light'} theme
+          </button>
+          <Search searchHandler={searchHandler} />
+          {isLoading && <h2>Loading....</h2>}
+          {!isLoading && (!items || items.length === 0) && (
+            <p>No results found.</p>
+          )}
+          {!isLoading && items.length > 0 && (
+            <>
+              <ResultsList results={items} onItemClick={handleItemClick} />
+              <Pagination
+                totalItemsCount={data?.count || 0}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
+            </>
+          )}
+        </div>
+        {detailsOpened && (
+          <div className={styles.detailsWrapper}>
+            <Outlet />
+          </div>
         )}
-        {!isLoading && items.length > 0 && (
-          <>
-            <ResultsList results={items} onItemClick={handleItemClick} />
-            <Pagination
-              totalItemsCount={data?.count || 0}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            />
-          </>
+        {selectedItems.length > 0 && (
+          <div className={`${styles.flyout} ${styles[theme]}`}>
+            <h3>{selectedItems.length} item(s) selected</h3>
+            <button onClick={handleUnselectAll}>Unselect all</button>
+            <button onClick={downloadHandler}>Download</button>
+          </div>
         )}
       </div>
-      {detailsOpened && (
-        <div className={styles.detailsWrapper}>
-          <Outlet />
-        </div>
-      )}
-      {selectedItems.length > 0 && (
-        <div className={styles.flyout}>
-          <h3>{selectedItems.length} item(s) selected</h3>
-          <button onClick={handleUnselectAll}>Unselect all</button>
-          <button onClick={downloadHandler}>Download</button>
-        </div>
-      )}
-    </div>
+    </ThemeContext.Provider>
   );
 };
 

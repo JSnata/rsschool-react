@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsAPI } from '../services/ItemsService';
@@ -9,6 +9,7 @@ import {
 } from '../store/reducers/itemsSlice';
 import { RootState } from '../store/store';
 import styles from './ItemDetails.module.css';
+import { ThemeContext } from '../pages/MainPage';
 
 const ItemDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,8 @@ const ItemDetails = () => {
   const selectedItem = useSelector(
     (state: RootState) => state.items.selectedItem,
   );
+
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     if (data) {
@@ -48,8 +51,11 @@ const ItemDetails = () => {
   }
 
   return (
-    <div className={styles.detailsContainer}>
-      <button onClick={handleClose} className={styles.closeButton}>
+    <div className={`${styles.detailsContainer} ${styles[theme]}`}>
+      <button
+        onClick={handleClose}
+        className={`${styles.closeButton} ${styles[theme]}`}
+      >
         Close
       </button>
       <h2>Details:</h2>

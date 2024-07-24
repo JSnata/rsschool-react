@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './Search.module.css';
 import useSearchQuery from '../customHooks/useSearchQuery';
+import { ThemeContext } from '../pages/MainPage';
 
 interface Props {
   searchHandler: (query: string) => void;
@@ -8,6 +9,7 @@ interface Props {
 
 const SearchComponent = (props: Props) => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
+  const { theme } = useContext(ThemeContext);
 
   const handleSearch = () => {
     const trimmedQuery = searchQuery.trim();
@@ -20,9 +22,12 @@ const SearchComponent = (props: Props) => {
         type="text"
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}
-        className={styles.searchInput}
+        className={`${styles.searchInput} ${styles[theme]}`}
       />
-      <button onClick={handleSearch} className={styles.searchButton}>
+      <button
+        onClick={handleSearch}
+        className={`${styles.searchButton} ${styles[theme]}`}
+      >
         Search
       </button>
     </div>

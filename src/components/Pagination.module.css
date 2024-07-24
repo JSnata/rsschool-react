@@ -10,6 +10,7 @@
   border: 1px solid #ccc;
   background: transparent;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .page:hover {
@@ -19,4 +20,31 @@
 .active {
   background: #e67a37;
   font-weight: bold;
+}
+
+.light .page {
+  color: #000000;
+  border-color: #ccc;
+}
+
+.light .page:hover {
+  background: #d7923f;
+  color: #ffffff;
+}
+
+.light .active {
+  background: #e67a37;
+}
+
+.dark .page {
+  color: #ffffff;
+  border-color: #444444;
+}
+
+.dark .page:hover {
+  background: #b33000;
+}
+
+.dark .active {
+  background: #b33000;
 }

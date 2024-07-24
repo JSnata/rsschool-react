@@ -1,4 +1,39 @@
+.detailsContainer {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.detailsContainer.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.detailsContainer.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
 .closeButton {
   background-color: #d7923f;
   color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.closeButton:hover,
+.closeButton.dark,
+.closeButton.light:hover {
+  background-color: #b33000;
+}
+
+.closeButton.light,
+.closeButton.dark:hover {
+  background-color: #d7923f;
 }
