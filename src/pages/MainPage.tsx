@@ -66,10 +66,6 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
     setSearchParams({ page: '1' });
   };
 
-  const handlePageChange = (page: number) => {
-    setSearchParams({ page: page.toString() });
-  };
-
   const handleClose = () => {
     navigate(`/?page=${currentPage}`);
     hideDetails();
@@ -165,7 +161,6 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
               <Pagination
                 totalItemsCount={data?.count || 0}
                 currentPage={currentPage}
-                onPageChange={handlePageChange}
               />
             </>
           )}

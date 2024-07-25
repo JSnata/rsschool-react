@@ -1,16 +1,21 @@
 import React, { useContext } from 'react';
 import styles from './Pagination.module.css';
 import { ThemeContext } from '../pages/MainPage';
+import { useSearchParams } from 'react-router-dom';
 
 interface Props {
   totalItemsCount: number;
   currentPage: number;
-  onPageChange: (page: number) => void;
 }
 
-const Pagination = ({ totalItemsCount, currentPage, onPageChange }: Props) => {
+const Pagination = ({ totalItemsCount, currentPage }: Props) => {
   const totalPages = Math.ceil(totalItemsCount / 10);
   const { theme } = useContext(ThemeContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const handlePageChange = (page: number) => {
+    setSearchParams({ page: page.toString() });
+    console.log(searchParams);
+  };
 
   if (totalPages <= 1) return null;
 
@@ -22,7 +27,7 @@ const Pagination = ({ totalItemsCount, currentPage, onPageChange }: Props) => {
           <button
             key={page}
             className={`${styles.page} ${currentPage === page ? styles.active : ''}`}
-            onClick={() => onPageChange(page)}
+            onClick={() => handlePageChange(page)}
           >
             {page}
           </button>
