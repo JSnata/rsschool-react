@@ -23,11 +23,7 @@ interface MainPageProps {
   showDetails: () => void;
 }
 
-const MainPage = ({
-  detailsOpened,
-  hideDetails,
-  showDetails,
-}: MainPageProps) => {
+const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -72,11 +68,6 @@ const MainPage = ({
 
   const handlePageChange = (page: number) => {
     setSearchParams({ page: page.toString() });
-  };
-
-  const handleItemClick = (id: string) => {
-    navigate(`details/${id}?page=${currentPage}`);
-    showDetails();
   };
 
   const handleClose = () => {
@@ -170,7 +161,7 @@ const MainPage = ({
           )}
           {!isLoading && items.length > 0 && (
             <>
-              <ResultsList results={items} onItemClick={handleItemClick} />
+              <ResultsList results={items} />
               <Pagination
                 totalItemsCount={data?.count || 0}
                 currentPage={currentPage}
