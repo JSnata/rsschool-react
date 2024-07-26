@@ -1,15 +1,15 @@
 import React, { useEffect, useContext } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsAPI } from '../services/ItemsService';
+import { itemsAPI } from '../../services/ItemsService';
 import {
   setSelectedItem,
   setIsLoading,
   setError,
-} from '../store/reducers/itemsSlice';
-import { RootState } from '../store/store';
+} from '../../store/reducers/itemsSlice';
+import { RootState } from '../../store/store';
 import styles from './ItemDetails.module.css';
-import { ThemeContext } from '../pages/MainPage';
+import { ThemeContext } from '../../pages/MainPage';
 
 const ItemDetails = () => {
   const { id } = useParams<{ id: string }>();

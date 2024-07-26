@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { People } from '../types/types';
-import styles from './ResultsList.module.css';
-import { RootState } from '../store/store';
-import { toggleSelectedItem } from '../store/reducers/itemsSlice';
-import { ThemeContext } from '../pages/MainPage';
+import { People } from '../../types/types';
+import styles from '../ResultsList/ResultsList.module.css';
+import { RootState } from '../../store/store';
+import { toggleSelectedItem } from '../../store/reducers/itemsSlice';
+import { ThemeContext } from '../../pages/MainPage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DetailsContext } from '../App';
+import { DetailsContext } from '../../App';
 
 interface Props {
   person: People;

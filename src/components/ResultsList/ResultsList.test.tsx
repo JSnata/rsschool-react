@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ResultsList from './ResultsList';
 import { Provider as ReduxProvider } from 'react-redux';
-import { setupStore } from '../store/store';
+import { setupStore } from '../../store/store';
 const store = setupStore();
 
 const data = [

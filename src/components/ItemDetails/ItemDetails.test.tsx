@@ -2,11 +2,11 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider as ReduxProvider } from 'react-redux';
-import { setupStore } from '../store/store';
+import { setupStore } from '../../store/store';
 import ItemDetails from './ItemDetails';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { DetailsContext } from '../App';
+import { DetailsContext } from '../../App';
 import { vi } from 'vitest';
 
 const data = {

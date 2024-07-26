@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styles from './Pagination.module.css';
-import { ThemeContext } from '../pages/MainPage';
+import { ThemeContext } from '../../pages/MainPage';
 import { useSearchParams } from 'react-router-dom';
 
 interface Props {

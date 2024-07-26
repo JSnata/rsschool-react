@@ -3,7 +3,7 @@ import './App.css';
 import MainPage from './pages/MainPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Route, Routes } from 'react-router-dom';
-import ItemDetails from './components/ItemDetails';
+import ItemDetails from './components/ItemDetails/ItemDetails';
 import { Provider as ReduxProvider } from 'react-redux';
 import { setupStore } from './store/store';
 

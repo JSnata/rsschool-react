@@ -1,17 +1,17 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ResultsList from '../components/ResultsList';
-import Search from '../components/Search';
+import ResultsList from '../components/ResultsList/ResultsList';
+import Search from '../components/Search/Search';
 import styles from './MainPage.module.css';
-import Pagination from '../components/Pagination';
+import Pagination from '../components/Pagination/Pagination';
 import useSearchQuery from '../customHooks/useSearchQuery';
 import { itemsAPI } from '../services/ItemsService';
 import { setItems, setIsLoading, setError } from '../store/reducers/itemsSlice';
 import { RootState } from '../store/store';
-import ErrorButton from '../components/ErrorButton';
-import ToggleTheme from '../components/ToggleTheme';
-import Flyout from '../components/Flyout';
+import ErrorButton from '../components/ErrorButton/ErrorButton';
+import ToggleTheme from '../components/ToggleTheme/ToggleTheme';
+import Flyout from '../components/Flyout/Flyout';
 
 interface ThemeContextType {
   theme: string;

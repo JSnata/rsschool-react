@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, beforeEach, vi } from 'vitest';
 import ErrorButton from './ErrorButton';
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from '../ErrorBoundary';
 
 describe('ErrorButton сomponent', () => {
   const consoleError = console.error;

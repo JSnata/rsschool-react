@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, beforeEach, vi } from 'vitest';
 import Search from './Search';
-import * as useSearchQuery from '../customHooks/useSearchQuery';
+import * as useSearchQuery from '../../customHooks/useSearchQuery';
 
 const mockUseSearchQuery = vi.fn();
 

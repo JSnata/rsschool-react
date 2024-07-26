@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styles from './Search.module.css';
-import useSearchQuery from '../customHooks/useSearchQuery';
-import { ThemeContext } from '../pages/MainPage';
+import useSearchQuery from '../../customHooks/useSearchQuery';
+import { ThemeContext } from '../../pages/MainPage';
 
 interface Props {
   searchHandler: (query: string) => void;

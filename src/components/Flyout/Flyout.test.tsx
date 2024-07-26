@@ -2,8 +2,8 @@ import React, { createContext } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, vi } from 'vitest';
 import { Provider } from 'react-redux';
-import { setupStore } from '../store/store';
-import { Flyout } from '../components/Flyout';
+import { setupStore } from '../../store/store';
+import { Flyout } from './Flyout';
 
 interface ThemeContextType {
   theme: string;

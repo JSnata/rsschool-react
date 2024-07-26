@@ -1,7 +1,7 @@
 import React from 'react';
-import { People } from '../types/types';
+import { People } from '../../types/types';
 import styles from './ResultsList.module.css';
-import ResultItem from './ResultItem';
+import ResultItem from '../ResultItem/ResultItem';
 
 interface Props {
   results: People[];
