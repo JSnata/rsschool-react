@@ -6,7 +6,7 @@ const ErrorButton = () => {
 
   useEffect(() => {
     if (hasError) {
-      throw new Error('Error boundary wrapper works! Test error occurred');
+      throw new Error('Error boundary wrapper works! Error occurred');
     }
   }, [hasError]);
 

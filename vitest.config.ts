@@ -9,6 +9,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      exclude: [
+        './src/types',
+        '.eslintrc.cjs',
+        'vite.config.ts',
+        'vitest.config.ts',
+        './src/vite-env.d.ts',
+      ],
     },
   },
 });

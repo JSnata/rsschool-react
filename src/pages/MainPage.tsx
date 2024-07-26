@@ -14,6 +14,7 @@ import {
   unselectAllItems,
 } from '../store/reducers/itemsSlice';
 import { RootState } from '../store/store';
+import ErrorButton from '../components/ErrorButton';
 
 export const ThemeContext = createContext({ theme: 'light' });
 
@@ -162,6 +163,7 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
                 totalItemsCount={data?.count || 0}
                 currentPage={currentPage}
               />
+              <ErrorButton />
             </>
           )}
         </div>

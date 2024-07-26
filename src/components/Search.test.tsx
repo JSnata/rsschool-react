@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, expect, beforeEach, vi } from 'vitest';
 import Search from './Search';
 import * as useSearchQuery from '../customHooks/useSearchQuery';
 
@@ -16,14 +16,14 @@ describe('Search component', () => {
     vi.spyOn(useSearchQuery, 'default').mockImplementation(mockUseSearchQuery);
   });
 
-  it('updates input value on change', () => {
+  test('updates input value on change', () => {
     render(<Search searchHandler={vi.fn()} />);
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'newValue' } });
     expect(searchQueryMock[1]).toHaveBeenCalledWith('newValue');
   });
 
-  it('contains input and button', () => {
+  test('contains input and button', () => {
     render(<Search searchHandler={vi.fn()} />);
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
