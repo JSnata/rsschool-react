@@ -149,7 +149,9 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
           tabIndex={0}
         >
           <ToggleTheme />
-          <h3>Find your favourite character!</h3>
+          <h3 className={`${styles.heading} ${styles[theme]}`}>
+            Find your favourite character!
+          </h3>
           <Search searchHandler={searchHandler} />
           {isLoading && <h2>Loading....</h2>}
           {!isLoading && (!items || items.length === 0) && (

@@ -5,6 +5,18 @@
   padding: 20px;
 }
 
+.heading {
+  align-self: center;
+}
+
+.heading.dark {
+  color: #fff;
+}
+
+.heading.light {
+  color: black;
+}
+
 .searchWrapper {
   width: 50%;
   display: flex;
