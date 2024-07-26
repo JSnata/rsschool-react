@@ -7,16 +7,24 @@ import styles from './MainPage.module.css';
 import Pagination from '../components/Pagination';
 import useSearchQuery from '../customHooks/useSearchQuery';
 import { itemsAPI } from '../services/ItemsService';
-import {
-  setItems,
-  setIsLoading,
-  setError,
-  unselectAllItems,
-} from '../store/reducers/itemsSlice';
+import { setItems, setIsLoading, setError } from '../store/reducers/itemsSlice';
 import { RootState } from '../store/store';
 import ErrorButton from '../components/ErrorButton';
+import ToggleTheme from '../components/ToggleTheme';
+import Flyout from '../components/Flyout';
 
-export const ThemeContext = createContext({ theme: 'light' });
+interface ThemeContextType {
+  theme: string;
+  setTheme: (theme: string) => void;
+}
+
+const defaultContextValue: ThemeContextType = {
+  theme: 'light',
+  setTheme: () => {},
+};
+
+export const ThemeContext =
+  createContext<ThemeContextType>(defaultContextValue);
 
 interface MainPageProps {
   detailsOpened: boolean;
@@ -30,11 +38,7 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
+  const [theme, setTheme] = useState('light');
 
   const { data, error, isLoading } = itemsAPI.useFetchPeopleQuery(
     { page: currentPage, search: searchQuery },
@@ -76,10 +80,6 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
     if (event.key === 'Enter' || event.key === ' ') {
       handleClose();
     }
-  };
-
-  const handleUnselectAll = () => {
-    dispatch(unselectAllItems());
   };
 
   const downloadHandler = () => {
@@ -139,7 +139,7 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       <div className={`${styles.container} mainPage ${theme}`}>
         <div
           className={styles.searchWrapper}
@@ -148,9 +148,8 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
           role="button"
           tabIndex={0}
         >
-          <button onClick={toggleTheme} className={styles.toggleButton}>
-            {theme === 'light' ? 'Dark' : 'Light'} theme
-          </button>
+          <ToggleTheme />
+          <h3>Find your favourite character!</h3>
           <Search searchHandler={searchHandler} />
           {isLoading && <h2>Loading....</h2>}
           {!isLoading && (!items || items.length === 0) && (
@@ -173,11 +172,7 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
           </div>
         )}
         {selectedItems.length > 0 && (
-          <div className={`${styles.flyout} ${styles[theme]}`}>
-            <h3>{selectedItems.length} item(s) selected</h3>
-            <button onClick={handleUnselectAll}>Unselect all</button>
-            <button onClick={downloadHandler}>Download</button>
-          </div>
+          <Flyout downloadHandler={downloadHandler} />
         )}
       </div>
     </ThemeContext.Provider>

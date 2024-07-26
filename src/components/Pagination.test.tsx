@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Pagination from './Pagination';
 
 describe('Pagination component', () => {
-  it('updates URL query parameter when page changes', async () => {
+  test('updates URL query parameter when page changes', async () => {
     render(
       <BrowserRouter>
         <Routes>

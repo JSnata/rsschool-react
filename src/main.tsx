@@ -8,7 +8,7 @@ import ItemDetails from './components/ItemDetails.tsx';
 
 const router = createBrowserRouter([
   {
-    path: '*',
+    path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
