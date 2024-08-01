@@ -8,6 +8,9 @@ interface Props {
 }
 
 const ResultsList = ({ results }: Props) => {
+  {
+    console.log('reload');
+  }
   return (
     <ul className={styles.list}>
       {!results.length && <p>No results found.</p>}

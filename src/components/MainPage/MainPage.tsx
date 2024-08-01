@@ -1,17 +1,25 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import ResultsList from '../components/ResultsList/ResultsList';
-import Search from '../components/Search/Search';
+import ResultsList from '../ResultsList/ResultsList';
+import Search from '../Search/Search';
 import styles from './MainPage.module.css';
-import Pagination from '../components/Pagination/Pagination';
-import useSearchQuery from '../customHooks/useSearchQuery';
-import { itemsAPI } from '../services/ItemsService';
-import { setItems, setIsLoading, setError } from '../store/reducers/itemsSlice';
-import { RootState } from '../store/store';
-import ErrorButton from '../components/ErrorButton/ErrorButton';
-import ToggleTheme from '../components/ToggleTheme/ToggleTheme';
-import Flyout from '../components/Flyout/Flyout';
+import Pagination from '../Pagination/Pagination';
+import useSearchQuery from '../../customHooks/useSearchQuery';
+import { itemsAPI } from '../../services/ItemsService';
+import {
+  setItems,
+  setIsLoading,
+  setError,
+} from '../../store/reducers/itemsSlice';
+import { RootState } from '../../store/store';
+import ErrorButton from '../ErrorButton/ErrorButton';
+import ToggleTheme from '../ToggleTheme/ToggleTheme';
+import Flyout from '../Flyout/Flyout';
+import { useRouter } from 'next/router';
+import { useDetails } from '../../context/DetailsContext';
+
+const ItemDetails = dynamic(() => import('../ItemDetails/ItemDetails'));
 
 interface ThemeContextType {
   theme: string;
@@ -26,19 +34,15 @@ const defaultContextValue: ThemeContextType = {
 export const ThemeContext =
   createContext<ThemeContextType>(defaultContextValue);
 
-interface MainPageProps {
-  detailsOpened: boolean;
-  hideDetails: () => void;
-  showDetails: () => void;
-}
-
-const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
+const MainPage = () => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const { page, id } = router.query;
+  const currentPage = parseInt((page as string) || '1', 10);
   const [theme, setTheme] = useState('light');
+
+  const { detailsOpened, hideDetails } = useDetails();
 
   const { data, error, isLoading } = itemsAPI.useFetchPeopleQuery(
     { page: currentPage, search: searchQuery },
@@ -62,23 +66,31 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
     }
   }, [data, isLoading, error, dispatch]);
 
-  useEffect(() => {
-    setSearchParams({ page: currentPage.toString() });
-  }, [currentPage, setSearchParams]);
-
   const searchHandler = (query: string) => {
     setSearchQuery(query);
-    setSearchParams({ page: '1' });
+    console.log(searchQuery);
+
+    router.push({
+      pathname: '/',
+      query: { page: '1' },
+    });
   };
 
-  const handleClose = () => {
-    navigate(`/?page=${currentPage}`);
+  const handleCloseDetails = () => {
+    router.push(
+      {
+        pathname: '/',
+        query: { page: currentPage.toString() },
+      },
+      undefined,
+      { shallow: true },
+    );
     hideDetails();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      handleClose();
+      handleCloseDetails();
     }
   };
 
@@ -143,8 +155,8 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
       <div className={`${styles.container} mainPage ${theme}`}>
         <div
           className={styles.searchWrapper}
-          onClick={detailsOpened ? handleClose : undefined}
-          onKeyDown={detailsOpened ? handleKeyDown : undefined}
+          onClick={id ? handleCloseDetails : undefined}
+          onKeyDown={id ? handleKeyDown : undefined}
           role="button"
           tabIndex={0}
         >
@@ -153,11 +165,9 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
             Find your favourite character!
           </h3>
           <Search searchHandler={searchHandler} />
-          {isLoading && <h2>Loading....</h2>}
-          {!isLoading && (!items || items.length === 0) && (
-            <p>No results found.</p>
-          )}
-          {!isLoading && items.length > 0 && (
+          {/* {isLoading && <h2>Loading....</h2>} */}
+          {(!items || items.length === 0) && <p>No results found.</p>}
+          {items.length > 0 && (
             <>
               <ResultsList results={items} />
               <Pagination
@@ -168,9 +178,9 @@ const MainPage = ({ detailsOpened, hideDetails }: MainPageProps) => {
             </>
           )}
         </div>
-        {detailsOpened && (
+        {Boolean(id) && (
           <div className={styles.detailsWrapper}>
-            <Outlet />
+            <ItemDetails />
           </div>
         )}
         {selectedItems.length > 0 && (

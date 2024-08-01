@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import MainPage from './MainPage';
-import { setupStore } from '../store/store';
+import { setupStore } from '../../store/store';
 
 const server = setupServer(
   http.get('https://swapi.dev/api/people', () => {

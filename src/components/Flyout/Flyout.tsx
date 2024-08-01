@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styles from './Flyout.module.css';
-import { ThemeContext } from '../../pages/MainPage';
+import { ThemeContext } from '../MainPage/MainPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { unselectAllItems } from '../../store/reducers/itemsSlice';

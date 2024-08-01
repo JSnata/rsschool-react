@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsAPI } from '../../services/ItemsService';
 import {
@@ -9,16 +9,18 @@ import {
 } from '../../store/reducers/itemsSlice';
 import { RootState } from '../../store/store';
 import styles from './ItemDetails.module.css';
-import { ThemeContext } from '../../pages/MainPage';
+import { ThemeContext } from '../MainPage/MainPage';
 
 const ItemDetails = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const { id } = router.query;
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const { page } = router.query;
+  const currentPage = parseInt((page as string) || '1', 10);
 
-  const { data, error, isLoading } = itemsAPI.useFetchPersonByIdQuery(id);
+  const { data, error, isLoading } = itemsAPI.useFetchPersonByIdQuery(
+    id as string,
+  );
 
   const selectedItem = useSelector(
     (state: RootState) => state.items.selectedItem,
@@ -39,7 +41,14 @@ const ItemDetails = () => {
   }, [data, isLoading, error, dispatch]);
 
   const handleClose = () => {
-    navigate(`/?page=${currentPage}`);
+    router.push(
+      {
+        pathname: '/',
+        query: { page: currentPage.toString() },
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   if (isLoading) {
