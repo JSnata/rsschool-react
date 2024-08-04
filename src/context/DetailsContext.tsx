@@ -6,7 +6,9 @@ interface DetailsContextType {
   hideDetails: () => void;
 }
 
-const DetailsContext = createContext<DetailsContextType | undefined>(undefined);
+export const DetailsContext = createContext<DetailsContextType | undefined>(
+  undefined,
+);
 
 export const useDetails = () => {
   const context = useContext(DetailsContext);

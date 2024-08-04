@@ -1,8 +1,150 @@
-import React from 'react';
-import MainPage from '../components/MainPage/MainPage';
+import React, { useContext } from 'react';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import ResultsList from '../components/ResultsList/ResultsList';
+import Search from '../components/Search/Search';
+import styles from '../components/MainPage/MainPage.module.css';
+import Pagination from '../components/Pagination/Pagination';
+import ErrorButton from '../components/ErrorButton/ErrorButton';
+import ToggleTheme from '../components/ToggleTheme/ToggleTheme';
+import Flyout from '../components/Flyout/Flyout';
+import { People } from '../types/types';
+import {
+  ItemsContext,
+  ItemsContextType,
+  useCombinedContext,
+} from '../context/ItemsContext';
+import { ThemeContext } from '../context/ThemeContext';
 
-const Home = () => {
-  return <MainPage />;
+const ItemDetails = dynamic(
+  () => import('../components/ItemDetails/ItemDetails'),
+);
+
+interface MainPageProps {
+  initialItems: People[];
+  initialCount: number;
+  itemDetails?: People | null;
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { page = '1', id, search } = context.query;
+  let itemDetails = null;
+  let initialData;
+  if (!search) {
+    const res = await fetch(`https://swapi.dev/api/people/?page=${page}`);
+    initialData = await res.json();
+  }
+
+  if (id) {
+    const itemRes = await fetch(`https://swapi.dev/api/people/${id}/`);
+    itemDetails = await itemRes.json();
+  }
+
+  if (search) {
+    const searchRes = await fetch(
+      `https://swapi.dev/api/people/?search=${search}`,
+    );
+    console.log(searchRes);
+
+    initialData = await searchRes.json();
+  }
+
+  return {
+    props: {
+      initialItems: initialData.results,
+      initialCount: initialData.count,
+      itemDetails,
+    },
+  };
 };
 
-export default Home;
+const MainPage = ({
+  initialItems,
+  initialCount,
+  itemDetails,
+}: MainPageProps) => {
+  const router = useRouter();
+  const { page, id, search } = router.query;
+  const { hideDetails } = useCombinedContext();
+  const { theme } = useContext(ThemeContext);
+
+  const { selectedItems, isLoading, error } = useContext(
+    ItemsContext,
+  ) as ItemsContextType;
+
+  const searchHandler = (search: string) => {
+    const queryParams: { page: string; search?: string } = { page: '1' };
+
+    if (search) {
+      queryParams.search = search;
+    }
+
+    router.push({
+      pathname: '/',
+      query: queryParams,
+    });
+  };
+
+  const handleCloseDetails = () => {
+    const queryParams: { page: string; search?: string } = { page: '1' };
+
+    if (search) {
+      queryParams.search = search as string;
+    }
+
+    router.push({
+      pathname: '/',
+      query: queryParams,
+    });
+
+    hideDetails();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleCloseDetails();
+    }
+  };
+
+  return (
+    <div className={`${styles.container} mainPage  ${styles[theme]}`}>
+      <div
+        className={styles.searchWrapper}
+        onClick={id ? handleCloseDetails : undefined}
+        onKeyDown={id ? handleKeyDown : undefined}
+        role="button"
+        tabIndex={0}
+      >
+        <ToggleTheme />
+        <h3 className={`${styles.heading} ${styles[theme]}`}>
+          Find your favourite character!
+        </h3>
+        <Search searchHandler={searchHandler} />
+        {isLoading && <h2>Loading....</h2>}
+        {error && <p>{error}</p>}
+        {(!initialItems || initialItems.length === 0) && (
+          <p>No results found.</p>
+        )}
+        {initialItems.length > 0 && (
+          <>
+            <ResultsList results={initialItems} />
+            <Pagination
+              totalItemsCount={initialCount || 0}
+              currentPage={Number(page) || 1}
+            />
+            <ErrorButton />
+          </>
+        )}
+      </div>
+      {id && itemDetails && (
+        <div className={styles.detailsWrapper}>
+          <ItemDetails data={itemDetails} handleClose={handleCloseDetails} />
+        </div>
+      )}
+      {selectedItems.length > 0 && <Flyout items={initialItems} />}
+    </div>
+  );
+};
+
+export default MainPage;

@@ -1,61 +1,17 @@
-import React, { useEffect, useContext } from 'react';
-import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import { itemsAPI } from '../../services/ItemsService';
-import {
-  setSelectedItem,
-  setIsLoading,
-  setError,
-} from '../../store/reducers/itemsSlice';
-import { RootState } from '../../store/store';
+import React, { useContext } from 'react';
 import styles from './ItemDetails.module.css';
-import { ThemeContext } from '../MainPage/MainPage';
+import { ThemeContext } from '../../context/ThemeContext';
+import { People } from '../../types/types';
 
-const ItemDetails = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const dispatch = useDispatch();
-  const { page } = router.query;
-  const currentPage = parseInt((page as string) || '1', 10);
+interface ItemDetailsprops {
+  data: People;
+  handleClose: () => void;
+}
 
-  const { data, error, isLoading } = itemsAPI.useFetchPersonByIdQuery(
-    id as string,
-  );
-
-  const selectedItem = useSelector(
-    (state: RootState) => state.items.selectedItem,
-  );
-
+const ItemDetails = ({ data, handleClose }: ItemDetailsprops) => {
   const { theme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    if (data) {
-      dispatch(setSelectedItem(data));
-    }
-    if (isLoading !== undefined) {
-      dispatch(setIsLoading(isLoading));
-    }
-    if (error) {
-      dispatch(setError(error.toString()));
-    }
-  }, [data, isLoading, error, dispatch]);
-
-  const handleClose = () => {
-    router.push(
-      {
-        pathname: '/',
-        query: { page: currentPage.toString() },
-      },
-      undefined,
-      { shallow: true },
-    );
-  };
-
-  if (isLoading) {
-    return <h3>Loading...</h3>;
-  }
-
-  if (!selectedItem) {
+  if (!data) {
     return <p>Item not found.</p>;
   }
 
@@ -68,14 +24,14 @@ const ItemDetails = () => {
         Close
       </button>
       <h2>Details:</h2>
-      <h3>{selectedItem.name}</h3>
-      <p>Birth Year: {selectedItem.birth_year}</p>
-      <p>Eye Color: {selectedItem.eye_color}</p>
-      <p>Gender: {selectedItem.gender}</p>
-      <p>Hair Color: {selectedItem.hair_color}</p>
-      <p>Height: {selectedItem.height} cm</p>
-      <p>Mass: {selectedItem.mass} kg</p>
-      <p>Skin Color: {selectedItem.skin_color}</p>
+      <h3>{data.name}</h3>
+      <p>Birth Year: {data.birth_year}</p>
+      <p>Eye Color: {data.eye_color}</p>
+      <p>Gender: {data.gender}</p>
+      <p>Hair Color: {data.hair_color}</p>
+      <p>Height: {data.height} cm</p>
+      <p>Mass: {data.mass} kg</p>
+      <p>Skin Color: {data.skin_color}</p>
     </div>
   );
 };

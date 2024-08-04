@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styles from './Search.module.css';
 import useSearchQuery from '../../customHooks/useSearchQuery';
-import { ThemeContext } from '../MainPage/MainPage';
+import { ThemeContext } from '../../context/ThemeContext';
 
 interface Props {
   searchHandler: (query: string) => void;
@@ -14,7 +14,6 @@ const SearchComponent = (props: Props) => {
   const handleSearch = () => {
     const trimmedQuery = searchQuery.trim();
     props.searchHandler(trimmedQuery);
-    console.log(trimmedQuery);
   };
 
   return (

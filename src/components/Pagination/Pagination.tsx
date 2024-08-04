@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styles from './Pagination.module.css';
-import { ThemeContext } from '../MainPage/MainPage';
 import { useRouter } from 'next/router';
+import { ThemeContext } from '../../context/ThemeContext';
 
 interface Props {
   totalItemsCount: number;

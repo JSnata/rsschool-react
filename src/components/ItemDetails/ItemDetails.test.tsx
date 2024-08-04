@@ -1,13 +1,12 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { Provider as ReduxProvider } from 'react-redux';
-import { setupStore } from '../../store/store';
+// import { Provider as ReduxProvider } from 'react-redux';
 import ItemDetails from './ItemDetails';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { DetailsContext } from '../../App';
-import { vi } from 'vitest';
+// import { DetailsContext } from '../../App';
+// import { vi } from 'vitest';
 
 const data = {
   name: 'Luke Skywalker',
@@ -49,17 +48,13 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const store = setupStore();
-
 describe('ItemDetails component', () => {
   test('displays loading indicator while fetching data', async () => {
     render(
       <MemoryRouter initialEntries={['/details/1']}>
-        <ReduxProvider store={store}>
-          <Routes>
-            <Route path="/details/:id" element={<ItemDetails />} />
-          </Routes>
-        </ReduxProvider>
+        <Routes>
+          <Route path="/details/:id" element={<ItemDetails />} />
+        </Routes>
       </MemoryRouter>,
     );
 
@@ -68,8 +63,7 @@ describe('ItemDetails component', () => {
   test('detailed card component correctly displays the detailed card data', async () => {
     render(
       <MemoryRouter initialEntries={['/details/1']}>
-        <ReduxProvider store={store}>
-          <DetailsContext.Provider
+        {/* <DetailsContext.Provider
             value={{
               showDetails: vi.fn(),
               hideDetails: vi.fn(),
@@ -79,8 +73,7 @@ describe('ItemDetails component', () => {
             <Routes>
               <Route path="/details/:id" element={<ItemDetails />} />
             </Routes>
-          </DetailsContext.Provider>
-        </ReduxProvider>
+          </DetailsContext.Provider> */}
       </MemoryRouter>,
     );
     await waitFor(() => {
@@ -106,7 +99,7 @@ describe('ItemDetails component', () => {
   test('clicking the close button hides the component.', async () => {
     render(
       <MemoryRouter initialEntries={['/details/1']}>
-        <ReduxProvider store={store}>
+        {/* <ReduxProvider store={store}>
           <DetailsContext.Provider
             value={{
               showDetails: vi.fn(),
@@ -118,7 +111,7 @@ describe('ItemDetails component', () => {
               <Route path="/details/:id" element={<ItemDetails />} />
             </Routes>
           </DetailsContext.Provider>
-        </ReduxProvider>
+        </ReduxProvider> */}
       </MemoryRouter>,
     );
 

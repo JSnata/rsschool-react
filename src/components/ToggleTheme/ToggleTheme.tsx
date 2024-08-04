@@ -1,11 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styles from './ToggleTheme.module.css';
-import { ThemeContext } from '../MainPage/MainPage';
+import { ThemeContext } from '../../context/ThemeContext';
 
 function ToggleTheme() {
   const { theme, setTheme } = useContext(ThemeContext);
 
+  useEffect(() => {
+    document.body.style.backgroundColor =
+      theme === 'light' ? '#fff' : '#2b2b2b';
+  });
+
   const toggleTheme = () => {
+    console.log(theme);
+
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 

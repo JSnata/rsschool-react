@@ -1,8 +1,6 @@
 import React, { createContext } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, vi } from 'vitest';
-import { Provider } from 'react-redux';
-import { setupStore } from '../../store/store';
 import { Flyout } from './Flyout';
 
 interface ThemeContextType {
@@ -18,16 +16,12 @@ const defaultContextValue: ThemeContextType = {
 export const MockThemeContext =
   createContext<ThemeContextType>(defaultContextValue);
 
-const store = setupStore();
-
 describe('Flyout Component', () => {
   test('should render with the correct theme-based styling', () => {
     render(
-      <Provider store={store}>
-        <MockThemeContext.Provider value={defaultContextValue}>
-          <Flyout downloadHandler={vi.fn()} />
-        </MockThemeContext.Provider>
-      </Provider>,
+      <MockThemeContext.Provider value={defaultContextValue}>
+        <Flyout downloadHandler={vi.fn()} />
+      </MockThemeContext.Provider>,
     );
 
     const flyoutDiv = screen.getByText(/item\(s\) selected/i).closest('div');
@@ -41,11 +35,9 @@ describe('Flyout Component', () => {
     const mockDownloadHandler = vi.fn();
 
     render(
-      <Provider store={store}>
-        <MockThemeContext.Provider value={defaultContextValue}>
-          <Flyout downloadHandler={mockDownloadHandler} />
-        </MockThemeContext.Provider>
-      </Provider>,
+      <MockThemeContext.Provider value={defaultContextValue}>
+        <Flyout downloadHandler={mockDownloadHandler} />
+      </MockThemeContext.Provider>,
     );
     fireEvent.click(screen.getByText(/Download/i));
 
