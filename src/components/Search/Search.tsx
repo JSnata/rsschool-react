@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styles from './Search.module.css';
 import useSearchQuery from '../../customHooks/useSearchQuery';
 import { ThemeContext } from '../../context/ThemeContext';
@@ -7,30 +7,42 @@ interface Props {
   searchHandler: (query: string) => void;
 }
 
-const SearchComponent = (props: Props) => {
+const SearchComponent = ({ searchHandler }: Props) => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
+  const [value, setValue] = useState(searchQuery || '');
   const { theme } = useContext(ThemeContext);
 
-  const handleSearch = () => {
-    const trimmedQuery = searchQuery.trim();
-    props.searchHandler(trimmedQuery);
+  useEffect(() => {
+    const trimmedQuery = value.trim();
+    searchHandler(trimmedQuery);
+    setSearchQuery(trimmedQuery || ' ');
+  }, []);
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmedQuery = value.trim();
+    searchHandler(trimmedQuery);
+    setSearchQuery(trimmedQuery || ' ');
   };
 
   return (
-    <div className={`${styles.container} ${styles[theme]}`}>
+    <form
+      className={`${styles.container} ${styles[theme]}`}
+      onSubmit={handleSearch}
+    >
       <input
         type="text"
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
         className={`${styles.searchInput} ${styles[theme]}`}
       />
       <button
-        onClick={handleSearch}
+        type="submit"
         className={`${styles.searchButton} ${styles[theme]}`}
       >
         Search
       </button>
-    </div>
+    </form>
   );
 };
 

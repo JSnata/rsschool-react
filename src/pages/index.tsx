@@ -28,9 +28,10 @@ interface MainPageProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { page = '1', id, search } = context.query;
+  const { page = '1', id, search = '' } = context.query;
   let itemDetails = null;
   let initialData;
+
   if (!search) {
     const res = await fetch(`https://swapi.dev/api/people/?page=${page}`);
     initialData = await res.json();
@@ -45,8 +46,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const searchRes = await fetch(
       `https://swapi.dev/api/people/?search=${search}`,
     );
-    console.log(searchRes);
-
     initialData = await searchRes.json();
   }
 
@@ -76,7 +75,7 @@ const MainPage = ({
   const searchHandler = (search: string) => {
     const queryParams: { page: string; search?: string } = { page: '1' };
 
-    if (search) {
+    if (search && search != ' ') {
       queryParams.search = search;
     }
 
@@ -89,7 +88,7 @@ const MainPage = ({
   const handleCloseDetails = () => {
     const queryParams: { page: string; search?: string } = { page: '1' };
 
-    if (search) {
+    if (search && search != ' ') {
       queryParams.search = search as string;
     }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { describe, expect, vi } from 'vitest';
-import ErrorPage from '../pages/ErrorPage';
+import ErrorPage from '../pages/404';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
