@@ -1,17 +1,28 @@
 import React, { useContext } from 'react';
 import styles from './Flyout.module.css';
 import { ThemeContext } from '../../context/ThemeContext';
-import { ItemsContext, ItemsContextType } from '../../context/ItemsContext';
+import { ItemsContext } from '../../context/ItemsContext';
 import { People } from '../../types/types';
+import { MockItemsContext } from '../../context/MockItemsContext';
 
 interface FlyoutProps {
   items: People[];
 }
+
 export const Flyout = ({ items }: FlyoutProps) => {
   const { theme } = useContext(ThemeContext);
-  const { selectedItems, unselectAllItems } = useContext(
-    ItemsContext,
-  ) as ItemsContextType;
+  const itemsContext = useContext(ItemsContext);
+  const mockItemsContext = useContext(MockItemsContext);
+  const context = itemsContext || mockItemsContext;
+
+  if (!context) {
+    throw new Error(
+      'Flyout component should be used in an ItemsProvider or MockItemsProvider',
+    );
+  }
+
+  const { selectedItems, unselectAllItems } = context;
+
   const handleUnselectAll = () => {
     unselectAllItems();
   };
@@ -71,6 +82,7 @@ export const Flyout = ({ items }: FlyoutProps) => {
     downloadLink.click();
     document.body.removeChild(downloadLink);
   };
+
   return (
     <div className={`${styles.flyout} ${styles[theme]}`}>
       <h3>{selectedItems.length} item(s) selected</h3>
