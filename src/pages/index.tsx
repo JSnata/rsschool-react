@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
@@ -67,10 +67,24 @@ const MainPage = ({
   const { page, id, search } = router.query;
   const { hideDetails } = useCombinedContext();
   const { theme } = useContext(ThemeContext);
+  const { selectedItems, error } = useContext(ItemsContext) as ItemsContextType;
 
-  const { selectedItems, isLoading, error } = useContext(
-    ItemsContext,
-  ) as ItemsContextType;
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleStart = () => setLoading(true);
+    const handleComplete = () => setLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, [router]);
 
   const searchHandler = (search: string) => {
     const queryParams: { page: string; search?: string } = { page: '1' };
@@ -107,7 +121,7 @@ const MainPage = ({
   };
 
   return (
-    <div className={`${styles.container} mainPage  ${styles[theme]}`}>
+    <div className={`${styles.container} mainPage ${styles[theme]}`}>
       <div
         className={styles.searchWrapper}
         onClick={id ? handleCloseDetails : undefined}
@@ -120,12 +134,12 @@ const MainPage = ({
           Find your favourite character!
         </h3>
         <Search searchHandler={searchHandler} />
-        {isLoading && <h2>Loading....</h2>}
+        {loading && <h2>Loading....</h2>}
         {error && <p>{error}</p>}
-        {(!initialItems || initialItems.length === 0) && (
+        {!loading && (!initialItems || initialItems.length === 0) && (
           <p>No results found.</p>
         )}
-        {initialItems.length > 0 && (
+        {!loading && initialItems.length > 0 && (
           <>
             <ResultsList results={initialItems} />
             <Pagination
