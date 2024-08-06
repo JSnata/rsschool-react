@@ -1,23 +1,13 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, vi } from 'vitest';
 import { Flyout } from './Flyout';
 import CombinedProvider from '../../context/ItemsContext';
 import { MockItemsProvider } from '../../context/MockItemsContext';
-
-interface ThemeContextType {
-  theme: string;
-  setTheme: (theme: string) => void;
-}
-
-const defaultThemeContextValue: ThemeContextType = {
-  theme: 'light',
-  setTheme: () => {},
-};
-
-export const MockThemeContext = createContext<ThemeContextType>(
+import {
   defaultThemeContextValue,
-);
+  MockThemeContext,
+} from '../../test-utils/mockThemeContext';
 
 const data = [
   {
@@ -74,7 +64,7 @@ const data = [
   },
 ];
 
-const defaultContextValue = {
+export const defaultContextValue = {
   selectedItems: ['1'],
   isLoading: false,
   error: '',

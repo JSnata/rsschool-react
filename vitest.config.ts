@@ -12,6 +12,7 @@ export default defineConfig({
         ...coverageConfigDefaults.exclude,
         '**/main.tsx',
         './src/types/types.ts',
+        './next.config.mts',
       ],
     },
   },

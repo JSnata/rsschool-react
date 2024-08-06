@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import ResultsList from '../components/ResultsList/ResultsList';
 import Search from '../components/Search/Search';
-import styles from '../components/MainPage/MainPage.module.css';
+import styles from './styles.module.css';
 import Pagination from '../components/Pagination/Pagination';
 import ErrorButton from '../components/ErrorButton/ErrorButton';
 import ToggleTheme from '../components/ToggleTheme/ToggleTheme';
