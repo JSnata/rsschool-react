@@ -78,9 +78,7 @@ export const Flyout = ({ items }: FlyoutProps) => {
     const downloadLink = document.createElement('a');
     downloadLink.setAttribute('href', encodedUri);
     downloadLink.setAttribute('download', `${selectedItems.length}_people.csv`);
-    document.body.appendChild(downloadLink);
     downloadLink.click();
-    document.body.removeChild(downloadLink);
   };
 
   return (
