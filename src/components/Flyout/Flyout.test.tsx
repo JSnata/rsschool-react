@@ -102,21 +102,19 @@ describe('Flyout Component', () => {
     expect(screen.getByText(/1 item\(s\) selected/i)).toBeInTheDocument();
   });
 
-  test('button calls unselectAllItems', () => {
-    render(
-      <MockItemsProvider value={defaultContextValue}>
-        <Flyout items={data} />
-      </MockItemsProvider>,
-    );
-
-    fireEvent.click(screen.getByText(/Unselect all/i));
-    expect(defaultContextValue.unselectAllItems).toHaveBeenCalledTimes(1);
-  });
-
-  test('download button calls CSV download', () => {
+  test('should call link.click()', () => {
+    const originalCreateElement = document.createElement.bind(document);
     const createElementSpy = vi.spyOn(document, 'createElement');
-    const appendChildSpy = vi.spyOn(document.body, 'appendChild');
-    const removeChildSpy = vi.spyOn(document.body, 'removeChild');
+    const clickSpy = vi.fn();
+
+    createElementSpy.mockImplementation((tagName: string) => {
+      if (tagName === 'a') {
+        const a = originalCreateElement(tagName);
+        a.click = clickSpy;
+        return a;
+      }
+      return originalCreateElement(tagName);
+    });
 
     render(
       <MockItemsProvider value={defaultContextValue}>
@@ -127,7 +125,17 @@ describe('Flyout Component', () => {
     fireEvent.click(screen.getByText('Download'));
 
     expect(createElementSpy).toHaveBeenCalledWith('a');
-    expect(appendChildSpy).toHaveBeenCalled();
-    expect(removeChildSpy).toHaveBeenCalled();
+    expect(clickSpy).toHaveBeenCalled();
+  });
+
+  test('button calls unselectAllItems', () => {
+    render(
+      <MockItemsProvider value={defaultContextValue}>
+        <Flyout items={data} />
+      </MockItemsProvider>,
+    );
+
+    fireEvent.click(screen.getByText('Unselect all'));
+    expect(defaultContextValue.unselectAllItems).toHaveBeenCalledTimes(1);
   });
 });
