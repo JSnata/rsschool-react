@@ -68,7 +68,6 @@ const MainPage = ({
   const { hideDetails, detailsOpened } = useCombinedContext();
   const { theme } = useContext(ThemeContext);
   const { selectedItems, error } = useContext(ItemsContext) as ItemsContextType;
-
   const [loading, setLoading] = useState(false);
   const [initialItems, setInitialItems] = useState(initialItemsProp);
   const [itemDetails, setItemDetails] = useState(itemDetailsProp);
@@ -84,11 +83,9 @@ const MainPage = ({
   useEffect(() => {
     const handleStart = () => setLoading(true);
     const handleComplete = () => setLoading(false);
-
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
     router.events.on('routeChangeError', handleComplete);
-
     return () => {
       router.events.off('routeChangeStart', handleStart);
       router.events.off('routeChangeComplete', handleComplete);
@@ -98,11 +95,9 @@ const MainPage = ({
 
   const searchHandler = (search: string) => {
     const queryParams: { page: string; search?: string } = { page: '1' };
-
     if (search && search != ' ') {
       queryParams.search = search;
     }
-
     router.push({
       pathname: '/',
       query: queryParams,
@@ -113,7 +108,6 @@ const MainPage = ({
     event: React.MouseEvent | React.KeyboardEvent,
   ) => {
     const queryParams: { page: string; search?: string } = { page: '1' };
-
     if (
       (event.target as HTMLElement).tagName === 'H3' ||
       (event.target as HTMLElement).id === 'person-button' ||
@@ -121,20 +115,14 @@ const MainPage = ({
     ) {
       return false;
     }
-
     if (search && search != ' ') {
       queryParams.search = search as string;
     }
-
-    console.log(itemDetails);
-
     setItemDetails(null);
-
     router.push({
       pathname: '/',
       query: queryParams,
     });
-
     hideDetails();
   };
 
@@ -143,8 +131,6 @@ const MainPage = ({
       handleCloseDetails(event);
     }
   };
-
-  console.log(id, itemDetails);
 
   return (
     <div className={`${styles.container} mainPage ${styles[theme]}`}>

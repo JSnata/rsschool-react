@@ -11,8 +11,6 @@ function ToggleTheme() {
   });
 
   const toggleTheme = () => {
-    console.log(theme);
-
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 

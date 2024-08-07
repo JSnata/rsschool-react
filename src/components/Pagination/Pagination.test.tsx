@@ -33,8 +33,6 @@ describe('Pagination component', () => {
     fireEvent.click(page2Button);
 
     await waitFor(() => {
-      console.log('Location: ', window.location.pathname);
-
       expect(window.location.href).toContain('page=2');
     });
   });
