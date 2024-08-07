@@ -17,14 +17,21 @@ describe('Search component', () => {
   });
 
   test('contains input and button', () => {
-    render(<Search searchHandler={vi.fn()} />);
+    render(<Search searchHandler={vi.fn()} setInitialItems={vi.fn()} />);
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   test('calls searchHandler and upd searchQuery with submitting', () => {
     const searchHandlerMock = vi.fn();
-    render(<Search searchHandler={searchHandlerMock} />);
+    const setInitialItemsMock = vi.fn();
+
+    render(
+      <Search
+        searchHandler={searchHandlerMock}
+        setInitialItems={setInitialItemsMock}
+      />,
+    );
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: 'Search' });
 
