@@ -32,8 +32,7 @@
 }
 
 .detailsWrapper {
-  width: 50%;
-  display: flex;
+  width: 100%;
 }
 
 .error {
