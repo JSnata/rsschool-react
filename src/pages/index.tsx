@@ -107,7 +107,9 @@ const MainPage = ({
   const handleCloseDetails = (
     event: React.MouseEvent | React.KeyboardEvent,
   ) => {
-    const queryParams: { page: string; search?: string } = { page: '1' };
+    const queryParams: { page: string; search?: string } = {
+      page: page as string,
+    };
     if (
       (event.target as HTMLElement).tagName === 'H3' ||
       (event.target as HTMLElement).id === 'person-button' ||
