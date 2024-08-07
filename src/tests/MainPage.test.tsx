@@ -122,10 +122,5 @@ describe('MainPage Component', () => {
         screen.getByRole('button', { name: 'Dark theme' || 'Light theme' }),
       ).toBeInTheDocument();
     });
-    await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'New Error!' }),
-      ).toBeInTheDocument();
-    });
   });
 });

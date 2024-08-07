@@ -6,7 +6,6 @@ import ResultsList from '../components/ResultsList/ResultsList';
 import Search from '../components/Search/Search';
 import styles from '../styles/styles.module.css';
 import Pagination from '../components/Pagination/Pagination';
-import ErrorButton from '../components/ErrorButton/ErrorButton';
 import ToggleTheme from '../components/ToggleTheme/ToggleTheme';
 import Flyout from '../components/Flyout/Flyout';
 import { People } from '../types/types';
@@ -166,7 +165,6 @@ const MainPage = ({
               totalItemsCount={initialCount || 0}
               currentPage={Number(page) || 1}
             />
-            <ErrorButton />
           </>
         ) : null}
       </div>

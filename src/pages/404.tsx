@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import styles from './ErrorPage.module.css';
+import styles from '../styles/ErrorPage.module.css';
 
 const Custom404 = () => {
   const router = useRouter();
