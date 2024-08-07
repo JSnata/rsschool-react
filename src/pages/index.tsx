@@ -59,17 +59,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const MainPage = ({
-  initialItems,
+  initialItems: initialItemsProp,
   initialCount,
-  itemDetails,
+  itemDetails: itemDetailsProp,
 }: MainPageProps) => {
   const router = useRouter();
   const { page, id, search } = router.query;
-  const { hideDetails } = useCombinedContext();
+  const { hideDetails, detailsOpened } = useCombinedContext();
   const { theme } = useContext(ThemeContext);
   const { selectedItems, error } = useContext(ItemsContext) as ItemsContextType;
 
   const [loading, setLoading] = useState(false);
+  const [initialItems, setInitialItems] = useState(initialItemsProp);
+  const [itemDetails, setItemDetails] = useState(itemDetailsProp);
+
+  useEffect(() => {
+    setInitialItems(initialItemsProp);
+  }, [initialItemsProp]);
+
+  useEffect(() => {
+    setItemDetails(itemDetailsProp);
+  }, [itemDetailsProp]);
 
   useEffect(() => {
     const handleStart = () => setLoading(true);
@@ -99,12 +109,26 @@ const MainPage = ({
     });
   };
 
-  const handleCloseDetails = () => {
+  const handleCloseDetails = (
+    event: React.MouseEvent | React.KeyboardEvent,
+  ) => {
     const queryParams: { page: string; search?: string } = { page: '1' };
+
+    if (
+      (event.target as HTMLElement).tagName === 'H3' ||
+      (event.target as HTMLElement).id === 'person-button' ||
+      (event.target as HTMLElement).closest('#person-button')
+    ) {
+      return false;
+    }
 
     if (search && search != ' ') {
       queryParams.search = search as string;
     }
+
+    console.log(itemDetails);
+
+    setItemDetails(null);
 
     router.push({
       pathname: '/',
@@ -116,15 +140,17 @@ const MainPage = ({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      handleCloseDetails();
+      handleCloseDetails(event);
     }
   };
+
+  console.log(id, itemDetails);
 
   return (
     <div className={`${styles.container} mainPage ${styles[theme]}`}>
       <div
         className={styles.searchWrapper}
-        onClick={id ? handleCloseDetails : undefined}
+        onClick={(e) => (id ? handleCloseDetails(e) : undefined)}
         onKeyDown={id ? handleKeyDown : undefined}
         role="button"
         tabIndex={0}
@@ -133,13 +159,19 @@ const MainPage = ({
         <h3 className={`${styles.heading} ${styles[theme]}`}>
           Find your favourite character!
         </h3>
-        <Search searchHandler={searchHandler} />
-        {loading && <h2>Loading....</h2>}
+        <Search
+          searchHandler={searchHandler}
+          setInitialItems={setInitialItems}
+        />
+        {loading && !detailsOpened && !initialItems.length && (
+          <h2>Loading....</h2>
+        )}
         {error && <p>{error}</p>}
         {!loading && (!initialItems || initialItems.length === 0) && (
           <p>No results found.</p>
         )}
-        {!loading && initialItems.length > 0 && (
+        {(!loading && initialItems.length) ||
+        (loading && initialItems.length) ? (
           <>
             <ResultsList results={initialItems} />
             <Pagination
@@ -148,14 +180,18 @@ const MainPage = ({
             />
             <ErrorButton />
           </>
-        )}
+        ) : null}
       </div>
-      {id && itemDetails && (
+      {detailsOpened ? (
         <div className={styles.detailsWrapper}>
-          <ItemDetails data={itemDetails} handleClose={handleCloseDetails} />
+          <ItemDetails
+            data={itemDetails}
+            handleClose={handleCloseDetails}
+            isLoading={loading}
+          />
         </div>
-      )}
-      {selectedItems.length > 0 && <Flyout items={initialItems} />}
+      ) : null}
+      {selectedItems.length ? <Flyout items={initialItems} /> : null}
     </div>
   );
 };

@@ -51,6 +51,7 @@ const ResultItem = ({ person }: Props) => {
         }
       />
       <button
+        id="person-button"
         onClick={() =>
           handleItemClick(person.url.split('/').filter(Boolean).pop()!)
         }

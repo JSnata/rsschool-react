@@ -2,12 +2,14 @@ import React, { useContext, useState, useEffect } from 'react';
 import styles from './Search.module.css';
 import useSearchQuery from '../../customHooks/useSearchQuery';
 import { ThemeContext } from '../../context/ThemeContext';
+import { People } from '../../types/types';
 
 interface Props {
   searchHandler: (query: string) => void;
+  setInitialItems: React.Dispatch<React.SetStateAction<People[]>>;
 }
 
-const SearchComponent = ({ searchHandler }: Props) => {
+const SearchComponent = ({ searchHandler, setInitialItems }: Props) => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [value, setValue] = useState(searchQuery || '');
   const { theme } = useContext(ThemeContext);
@@ -21,6 +23,8 @@ const SearchComponent = ({ searchHandler }: Props) => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedQuery = value.trim();
+
+    setInitialItems([]);
     searchHandler(trimmedQuery);
     setSearchQuery(trimmedQuery || ' ');
   };
