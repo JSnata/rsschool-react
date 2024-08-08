@@ -1,8 +1,10 @@
+'use client';
+
 import React, { useContext } from 'react';
 import { People } from '../../types/types';
 import styles from '../ResultsList/ResultsList.module.css';
 import { useDetails } from '../../context/DetailsContext';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ThemeContext } from '../../context/ThemeContext';
 import { ItemsContext, ItemsContextType } from '../../context/ItemsContext';
 
@@ -14,8 +16,10 @@ const ResultItem = ({ person }: Props) => {
   const { theme } = useContext(ThemeContext);
   const { showDetails } = useDetails();
   const router = useRouter();
-  const { page, search } = router.query;
-  const currentPage = parseInt((page as string) || '1', 10);
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const search = searchParams.get('search') || '';
+  const currentPage = parseInt(page, 10);
   const { selectedItems, toggleSelectedItem } = useContext(
     ItemsContext,
   ) as ItemsContextType;
@@ -25,20 +29,16 @@ const ResultItem = ({ person }: Props) => {
   };
 
   const handleItemClick = (id: string) => {
-    const queryParams: { page: string; search?: string } = {
-      page: currentPage.toString(),
-    };
-
+    const queryParams = new URLSearchParams({ page: currentPage.toString() });
     if (search) {
-      queryParams.search = search as string;
+      queryParams.set('search', search);
     }
+    queryParams.set('id', id);
 
-    router.push({
-      pathname: '/',
-      query: { id, ...queryParams },
-    });
+    router.push(`/?${queryParams.toString()}`);
     showDetails(id);
   };
+
   return (
     <li key={person.url} className={`${styles.resultItem} ${styles[theme]}`}>
       <input

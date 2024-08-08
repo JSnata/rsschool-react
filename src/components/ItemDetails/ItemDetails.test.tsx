@@ -5,7 +5,7 @@ import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtim
 import { MockItemsProvider } from '../../context/MockItemsContext';
 import { createMockrouter } from '../../test-utils/mockRouter';
 import { vi } from 'vitest';
-import * as originalModule from '../../pages';
+import * as originalModule from '../../app/main-page';
 import { DetailsProvider } from '../../context/DetailsContext';
 
 export const defaultContextValue = {

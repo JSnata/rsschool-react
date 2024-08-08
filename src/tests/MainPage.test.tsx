@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, afterEach, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import MainPage from '../pages/index';
+import MainPage from '../app/main-page';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { createMockrouter } from '../test-utils/mockRouter';
 import { MockItemsProvider } from '../context/MockItemsContext';

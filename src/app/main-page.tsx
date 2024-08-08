@@ -1,7 +1,8 @@
+'use client';
+
 import React, { useContext, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ResultsList from '../components/ResultsList/ResultsList';
 import Search from '../components/Search/Search';
 import styles from '../styles/styles.module.css';
@@ -26,44 +27,16 @@ interface MainPageProps {
   itemDetails?: People | null;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { page = '1', id, search = '' } = context.query;
-  let itemDetails = null;
-  let initialData;
-
-  if (!search) {
-    const res = await fetch(`https://swapi.dev/api/people/?page=${page}`);
-    initialData = await res.json();
-  }
-
-  if (id) {
-    const itemRes = await fetch(`https://swapi.dev/api/people/${id}/`);
-    itemDetails = await itemRes.json();
-  }
-
-  if (search) {
-    const searchRes = await fetch(
-      `https://swapi.dev/api/people/?search=${search}`,
-    );
-    initialData = await searchRes.json();
-  }
-
-  return {
-    props: {
-      initialItems: initialData.results,
-      initialCount: initialData.count,
-      itemDetails,
-    },
-  };
-};
-
 const MainPage = ({
   initialItems: initialItemsProp,
   initialCount,
   itemDetails: itemDetailsProp,
 }: MainPageProps) => {
   const router = useRouter();
-  const { page, id, search } = router.query;
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search') || '';
+  const page = searchParams.get('page') || '1';
+  const id = searchParams.get('id');
   const { hideDetails, detailsOpened } = useCombinedContext();
   const { theme } = useContext(ThemeContext);
   const { selectedItems, error } = useContext(ItemsContext) as ItemsContextType;
@@ -80,50 +53,38 @@ const MainPage = ({
   }, [itemDetailsProp]);
 
   useEffect(() => {
-    const handleStart = () => setLoading(true);
-    const handleComplete = () => setLoading(false);
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
-    return () => {
-      router.events.off('routeChangeStart', handleStart);
-      router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
-    };
+    setLoading(false);
   }, [router]);
 
   const searchHandler = (search: string) => {
-    const queryParams: { page: string; search?: string } = { page: '1' };
-    if (search && search != ' ') {
-      queryParams.search = search;
+    const queryParams = new URLSearchParams({ page: '1' });
+    if (search && search.trim() !== '') {
+      queryParams.set('search', search);
     }
-    router.push({
-      pathname: '/',
-      query: queryParams,
-    });
+    setLoading(true);
+    router.push(`/?${queryParams.toString()}`);
   };
 
   const handleCloseDetails = (
     event: React.MouseEvent | React.KeyboardEvent,
   ) => {
-    const queryParams: { page: string; search?: string } = {
-      page: page as string,
-    };
+    const queryParams = new URLSearchParams({ page });
+    console.log(page);
+
     if (
       (event.target as HTMLElement).tagName === 'H3' ||
       (event.target as HTMLElement).id === 'person-button' ||
+      (event.target as HTMLElement).id === 'pagination-btn' ||
       (event.target as HTMLElement).closest('#person-button')
     ) {
       return false;
     }
-    if (search && search != ' ') {
-      queryParams.search = search as string;
+    if (search && search.trim() !== '') {
+      queryParams.set('search', search);
     }
     setItemDetails(null);
-    router.push({
-      pathname: '/',
-      query: queryParams,
-    });
+    console.log(queryParams.toString());
+    router.push(`/?${queryParams.toString()}`);
     hideDetails();
   };
 
