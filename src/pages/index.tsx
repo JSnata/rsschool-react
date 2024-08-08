@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import ResultsList from '../components/ResultsList/ResultsList';
@@ -15,10 +14,7 @@ import {
   useCombinedContext,
 } from '../context/ItemsContext';
 import { ThemeContext } from '../context/ThemeContext';
-
-const ItemDetails = dynamic(
-  () => import('../components/ItemDetails/ItemDetails'),
-);
+import ItemDetails from '../components/ItemDetails/ItemDetails';
 
 interface MainPageProps {
   initialItems: People[];
@@ -112,6 +108,7 @@ const MainPage = ({
     if (
       (event.target as HTMLElement).tagName === 'H3' ||
       (event.target as HTMLElement).id === 'person-button' ||
+      (event.target as HTMLElement).id === 'pagination-btn' ||
       (event.target as HTMLElement).closest('#person-button')
     ) {
       return false;
