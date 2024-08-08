@@ -15,6 +15,7 @@ import {
 } from '../context/ItemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import ItemDetails from '../components/ItemDetails/ItemDetails';
+import { navigateWithQueryParams } from '../utils/navigation';
 
 interface MainPageProps {
   initialItems: People[];
@@ -89,22 +90,12 @@ const MainPage = ({
   }, [router]);
 
   const searchHandler = (search: string) => {
-    const queryParams: { page: string; search?: string } = { page: '1' };
-    if (search && search != ' ') {
-      queryParams.search = search;
-    }
-    router.push({
-      pathname: '/',
-      query: queryParams,
-    });
+    navigateWithQueryParams(router, '1', search);
   };
 
   const handleCloseDetails = (
     event: React.MouseEvent | React.KeyboardEvent,
   ) => {
-    const queryParams: { page: string; search?: string } = {
-      page: page as string,
-    };
     if (
       (event.target as HTMLElement).tagName === 'H3' ||
       (event.target as HTMLElement).id === 'person-button' ||
@@ -113,14 +104,8 @@ const MainPage = ({
     ) {
       return false;
     }
-    if (search && search != ' ') {
-      queryParams.search = search as string;
-    }
     setItemDetails(null);
-    router.push({
-      pathname: '/',
-      query: queryParams,
-    });
+    navigateWithQueryParams(router, page as string, search as string);
     hideDetails();
   };
 

@@ -3,6 +3,7 @@ import styles from './Pagination.module.css';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../../context/ThemeContext';
 import { useCombinedContext } from '../../context/ItemsContext';
+import { navigateWithQueryParams } from '../../utils/navigation';
 
 interface Props {
   totalItemsCount: number;
@@ -17,16 +18,7 @@ const Pagination = ({ totalItemsCount, currentPage }: Props) => {
   const { search } = router.query;
 
   const handlePageChange = (page: number) => {
-    const queryParams: { page: string; search?: string } = {
-      page: page.toString(),
-    };
-    if (search && search != ' ') {
-      queryParams.search = search as string;
-    }
-    router.push({
-      pathname: '/',
-      query: queryParams,
-    });
+    navigateWithQueryParams(router, page.toString(), search as string);
     if (detailsOpened) {
       hideDetails();
     }
