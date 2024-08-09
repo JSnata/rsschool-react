@@ -19,7 +19,7 @@ async function getData(page = '1', id?: string, search = '') {
 
   if (search) {
     const searchRes = await fetch(
-      `https://swapi.dev/api/people/?search=${search}`,
+      `https://swapi.dev/api/people/?page=${page}&search=${search}`,
     );
     initialData = await searchRes.json();
   }
@@ -38,6 +38,8 @@ export default async function Page({
 }) {
   const { page = '1', id, search = '' } = searchParams;
   const data = await getData(page, id, search);
+
+  console.log(page);
 
   return (
     <CombinedProvider>

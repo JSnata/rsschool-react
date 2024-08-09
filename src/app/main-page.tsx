@@ -94,6 +94,8 @@ const MainPage = ({
     }
   };
 
+  console.log(initialItemsProp);
+
   return (
     <div className={`${styles.container} mainPage ${styles[theme]}`}>
       <div
