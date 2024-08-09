@@ -1,9 +1,23 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ResultItem from './ResultItem';
-import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import CombinedProvider from '../../context/ItemsContext';
 import { createMockrouter } from '../../test-utils/mockRouter';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import { vi } from 'vitest';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    get: (key: string) => {
+      if (key === 'page') return '1';
+      if (key === 'search') return '';
+      return '';
+    },
+  }),
+}));
 
 const data = {
   name: 'Luke Skywalker',

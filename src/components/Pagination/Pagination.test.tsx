@@ -1,11 +1,25 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Pagination from './Pagination';
-import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { createMockrouter } from '../../test-utils/mockRouter';
 import CombinedProvider from '../../context/ItemsContext';
 import { MockItemsProvider } from '../../context/MockItemsContext';
 import { vi } from 'vitest';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+
+const mockPush = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+  useSearchParams: () => ({
+    get: (key: string) => {
+      if (key === 'search') return '';
+      return null;
+    },
+  }),
+}));
 
 export const defaultContextValue = {
   selectedItems: ['1'],
@@ -33,7 +47,7 @@ describe('Pagination component', () => {
     fireEvent.click(page2Button);
 
     await waitFor(() => {
-      expect(window.location.href).toContain('page=2');
+      expect(mockPush).toHaveBeenCalledWith('/?page=2');
     });
   });
 });

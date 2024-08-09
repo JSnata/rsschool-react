@@ -3,7 +3,7 @@ import styles from './ItemDetails.module.css';
 import { ThemeContext } from '../../context/ThemeContext';
 import { People } from '../../types/types';
 
-interface ItemDetailsprops {
+interface ItemDetailsProps {
   data: People | null | undefined;
   handleClose: (
     event: React.MouseEvent | React.KeyboardEvent,
@@ -11,15 +11,8 @@ interface ItemDetailsprops {
   isLoading: boolean;
 }
 
-const ItemDetails = ({ data, handleClose, isLoading }: ItemDetailsprops) => {
+const ItemDetails = ({ data, handleClose }: ItemDetailsProps) => {
   const { theme } = useContext(ThemeContext);
-  if (!data && !isLoading) {
-    return <p>Item not found.</p>;
-  }
-
-  if (isLoading) {
-    return <h2>Loading...</h2>;
-  }
 
   if (data) {
     return (
@@ -42,6 +35,8 @@ const ItemDetails = ({ data, handleClose, isLoading }: ItemDetailsprops) => {
       </div>
     );
   }
+
+  return null;
 };
 
 export default ItemDetails;

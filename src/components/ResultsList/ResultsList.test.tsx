@@ -4,6 +4,20 @@ import ResultsList from './ResultsList';
 import CombinedProvider from '../../context/ItemsContext';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { createMockrouter } from '../../test-utils/mockRouter';
+import { vi } from 'vitest';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    get: (key: string) => {
+      if (key === 'page') return '1';
+      if (key === 'search') return '';
+      return '';
+    },
+  }),
+}));
 
 const data = [
   {
