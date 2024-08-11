@@ -46,15 +46,12 @@ const MainPage = ({
 
   useEffect(() => {
     setInitialItems(initialItemsProp);
+    setLoading(false);
   }, [initialItemsProp]);
 
   useEffect(() => {
     setItemDetails(itemDetailsProp);
   }, [itemDetailsProp]);
-
-  useEffect(() => {
-    setLoading(false);
-  }, [router]);
 
   const searchHandler = (search: string) => {
     const queryParams = new URLSearchParams({ page: '1' });
@@ -83,7 +80,6 @@ const MainPage = ({
       queryParams.set('search', search);
     }
     setItemDetails(null);
-    console.log(queryParams.toString());
     router.push(`/?${queryParams.toString()}`);
     hideDetails();
   };
@@ -94,7 +90,7 @@ const MainPage = ({
     }
   };
 
-  console.log(initialItemsProp);
+  console.log(loading);
 
   return (
     <div className={`${styles.container} mainPage ${styles[theme]}`}>
