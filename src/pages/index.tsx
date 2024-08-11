@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (search) {
     const searchRes = await fetch(
-      `https://swapi.dev/api/people/?search=${search}`,
+      `https://swapi.dev/api/people/?page=${page}&search=${search}`,
     );
     initialData = await searchRes.json();
   }
