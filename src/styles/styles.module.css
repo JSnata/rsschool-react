@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.container.dark {
+  background-color: #292626;
+}
+
+.container.light {
+  background-color: #fff;
+}
+
+.heading {
+  align-self: center;
+}
+
+.heading.dark {
+  color: #fff;
+}
+
+.heading.light {
+  color: black;
+}
+
+.searchWrapper {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.detailsWrapper {
+  width: 50%;
+}
+
+.error {
+  color: red;
+  font-size: 20px;
+  text-align: center;
+}

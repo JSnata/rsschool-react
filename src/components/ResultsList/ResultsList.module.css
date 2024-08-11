@@ -1,0 +1,42 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  list-style-type: none;
+}
+
+.resultItem {
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  transition: all ease-in-out 0.3s;
+}
+
+.resultItem:hover {
+  transform: scale(1.03);
+}
+
+.resultItem h3 {
+  margin: 0;
+  margin-top: 0;
+}
+
+.resultItem.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.resultItem.light h3 {
+  color: #d7923f;
+}
+
+.resultItem.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.resultItem.dark h3 {
+  color: #f1c40f;
+}

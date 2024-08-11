@@ -1,0 +1,38 @@
+.flyout {
+  position: fixed;
+  width: 30%;
+  bottom: 10px;
+  left: 65%;
+  right: 0;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #d7923f;
+}
+
+.flyout.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.flyout.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.flyout p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.flyout button {
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #d7923f;
+  color: white;
+}
+
+.flyout button:hover {
+  background-color: #b33000;
+}
