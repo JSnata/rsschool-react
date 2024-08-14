@@ -7,6 +7,7 @@ const Main = () => {
   const controlledData = useSelector(
     (state: RootState) => state.form.controlledData,
   );
+
   return (
     <div>
       <h2>Main Page</h2>
@@ -25,9 +26,13 @@ const Main = () => {
             <p>Email: {controlledData.email}</p>
             <p>Password: {controlledData.password}</p>
             <p>Gender: {controlledData.gender}</p>
-            <p>T&C accepted: {controlledData.acceptTerms}</p>
+            <p>T&C accepted: {controlledData.acceptTerms.toString()}</p>
             <p>Country: {controlledData.country}</p>
-            <p>Picture: {controlledData.picture}</p>
+            <img
+              src={controlledData.picture}
+              alt="Uploaded"
+              style={{ maxWidth: '200px', height: 'auto' }}
+            />
           </div>
         ) : (
           <p>No data</p>
