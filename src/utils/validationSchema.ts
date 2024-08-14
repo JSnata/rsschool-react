@@ -33,6 +33,21 @@ export const validationSchema = Yup.object().shape({
   acceptTerms: Yup.boolean().required(
     'You must accept the terms and conditions',
   ),
-  picture: Yup.mixed<FileList>().required('You should choose an picture'),
+  picture: Yup.mixed<FileList>()
+    .required('You should choose a picture')
+    .test('fileSize', 'File too large, should be less than 5MB', (value) => {
+      return value && value[0] && value[0].size <= 5000000;
+    })
+    .test(
+      'fileType',
+      'Unsupported file format, should be PNG or JPEG',
+      (value) => {
+        return (
+          value &&
+          value[0] &&
+          ['image/jpeg', 'image/png'].includes(value[0].type)
+        );
+      },
+    ),
   country: Yup.string().required('Country is required'),
 });
