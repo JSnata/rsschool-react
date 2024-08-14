@@ -1,5 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { saveControlledData } from '../redux/slices/formSlice';
+import { useNavigate } from 'react-router';
 
 type FormData = {
   name: string;
@@ -8,9 +11,12 @@ type FormData = {
 
 function ControlledFormPage() {
   const { register, handleSubmit } = useForm<FormData>();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (data: FormData) => {
-    console.log('Controlled Form Data:', data);
+    dispatch(saveControlledData(data));
+    navigate('/');
   };
 
   return (
