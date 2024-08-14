@@ -21,6 +21,13 @@ const Main = () => {
         {controlledData ? (
           <div>
             <p>Name: {controlledData.name}</p>
+            <p>Age: {controlledData.age}</p>
+            <p>Email: {controlledData.email}</p>
+            <p>Password: {controlledData.password}</p>
+            <p>Gender: {controlledData.gender}</p>
+            <p>T&C accepted: {controlledData.acceptTerms}</p>
+            <p>Country: {controlledData.country}</p>
+            <p>Picture: {controlledData.picture}</p>
           </div>
         ) : (
           <p>No data</p>
