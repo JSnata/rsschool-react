@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { saveControlledData } from '../redux/slices/formSlice';
+import { saveFormData } from '../redux/slices/formSlice';
 import { useNavigate } from 'react-router';
 import { validationSchema } from '../utils/validationSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -43,7 +43,7 @@ function ControlledFormPage() {
         picture: base64String,
       };
 
-      dispatch(saveControlledData(dataWithBase64Picture));
+      dispatch(saveFormData(dataWithBase64Picture));
       navigate('/');
     };
 

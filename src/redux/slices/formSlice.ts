@@ -1,39 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface FormData {
-  name: string;
-  age: number;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  gender: string;
-  acceptTerms: boolean;
-  picture: string;
-  country: string;
-}
+import { StoreFormData } from '../../types/types';
 
 export interface FormState {
-  uncontrolledData: FormData | null;
-  controlledData: FormData | null;
+  formDataList: StoreFormData[];
 }
 
 const initialState: FormState = {
-  uncontrolledData: null,
-  controlledData: null,
+  formDataList: [],
 };
 
 const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    saveUncontrolledData(state, action: PayloadAction<FormData>) {
-      state.uncontrolledData = action.payload;
-    },
-    saveControlledData(state, action: PayloadAction<FormData>) {
-      state.controlledData = action.payload;
+    saveFormData(state, action: PayloadAction<StoreFormData>) {
+      state.formDataList.push(action.payload);
     },
   },
 });
 
-export const { saveUncontrolledData, saveControlledData } = formSlice.actions;
+export const { saveFormData } = formSlice.actions;
 export default formSlice.reducer;

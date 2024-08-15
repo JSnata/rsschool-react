@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { saveUncontrolledData } from '../redux/slices/formSlice';
+import { saveFormData } from '../redux/slices/formSlice';
 import { useNavigate } from 'react-router';
 import { validationSchema } from '../utils/validationSchema';
 import { ValidationError } from 'yup';
+import UncontrolledField from '../components/UncontrolledField';
 
 function UncontrolledFormPage() {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ function UncontrolledFormPage() {
             picture: base64String,
           };
 
-          dispatch(saveUncontrolledData(dataWithBase64Picture));
+          dispatch(saveFormData(dataWithBase64Picture));
           navigate('/');
         };
 
@@ -60,7 +61,7 @@ function UncontrolledFormPage() {
       if (error instanceof ValidationError) {
         const newErrors: { [key: string]: string } = {};
         error.inner.forEach((err) => {
-          newErrors[err.path as string] = err.message;
+          newErrors[err.path!] = err.message;
         });
         setErrors(newErrors);
       }
@@ -69,35 +70,45 @@ function UncontrolledFormPage() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input type="text" id="name" ref={nameRef} />
-        {errors.name && <div>{errors.name}</div>}
-      </div>
-
-      <div>
-        <label htmlFor="age">Age</label>
-        <input type="number" id="age" ref={ageRef} />
-        {errors.age && <div>{errors.age}</div>}
-      </div>
-
-      <div>
-        <label htmlFor="email">Email</label>
-        <input type="email" id="email" ref={emailRef} />
-        {errors.email && <div>{errors.email}</div>}
-      </div>
-
-      <div>
-        <label htmlFor="password">Password</label>
-        <input type="password" id="password" ref={passwordRef} />
-        {errors.password && <div>{errors.password}</div>}
-      </div>
-
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" ref={confirmPasswordRef} />
-        {errors.confirmPassword && <div>{errors.confirmPassword}</div>}
-      </div>
+      <UncontrolledField
+        id="name"
+        label="Name"
+        ref={nameRef}
+        error={errors.name}
+        placeholder="Enter your name"
+      />
+      <UncontrolledField
+        id="age"
+        label="Age"
+        type="number"
+        ref={ageRef}
+        error={errors.age}
+        placeholder="Enter your age"
+      />
+      <UncontrolledField
+        id="email"
+        label="Email"
+        type="email"
+        ref={emailRef}
+        error={errors.email}
+        placeholder="Enter your email"
+      />
+      <UncontrolledField
+        id="password"
+        label="Password"
+        type="password"
+        ref={passwordRef}
+        error={errors.password}
+        placeholder="Enter your password"
+      />
+      <UncontrolledField
+        id="confirmPassword"
+        label="Confirm Password"
+        type="password"
+        ref={confirmPasswordRef}
+        error={errors.confirmPassword}
+        placeholder="Confirm your password"
+      />
 
       <div>
         <label htmlFor="gender">Gender</label>
@@ -121,11 +132,13 @@ function UncontrolledFormPage() {
         {errors.picture && <div>{errors.picture}</div>}
       </div>
 
-      <div>
-        <label htmlFor="country">Country</label>
-        <input type="text" id="country" ref={countryRef} />
-        {errors.country && <div>{errors.country}</div>}
-      </div>
+      <UncontrolledField
+        id="country"
+        label="Country"
+        ref={countryRef}
+        error={errors.country}
+        placeholder="Enter your country"
+      />
 
       <button type="submit">Submit</button>
     </form>
