@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import styles from '../pages/Form.module.css';
 
 interface InputFieldProps {
   id: string;
@@ -24,7 +25,7 @@ const UncontrolledField = forwardRef<HTMLInputElement, InputFieldProps>(
     ref,
   ) => {
     return (
-      <div>
+      <div className={`${styles.formGroup}`}>
         <label htmlFor={id}>{label}</label>
         <input
           id={id}
@@ -34,7 +35,7 @@ const UncontrolledField = forwardRef<HTMLInputElement, InputFieldProps>(
           required={required}
           onChange={onChange}
         />
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+        <div className={styles.ErrorMessage}>{error ? error : ''}</div>
       </div>
     );
   },

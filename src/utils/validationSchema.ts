@@ -31,10 +31,9 @@ export const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), undefined], 'Passwords should match')
     .required('Confirm your password'),
   gender: Yup.string().required('Gender is required'),
-  acceptTerms: Yup.boolean().oneOf(
-    [true],
-    'You must accept the terms and conditions',
-  ),
+  acceptTerms: Yup.boolean()
+    .oneOf([true], 'You must accept the terms and conditions')
+    .required('You must accept the terms and conditions'),
   picture: Yup.mixed<FileList>()
     .required('You should choose a picture')
     .test('fileSize', 'File too large, should be less than 5MB', (value) => {
