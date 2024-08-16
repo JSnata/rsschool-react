@@ -3,7 +3,8 @@ import * as Yup from 'yup';
 export const validationSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required')
-    .matches(/^[A-Z]/, 'Name should have first uppercase letter'),
+    .matches(/^[А-ЯA-Z]/, 'Name should start with an uppercase letter')
+    .matches(/^[\w\W]+$/, 'Invalid characters in name'),
   age: Yup.number()
     .required('Age is required')
     .typeError('Age should be a number')
@@ -30,7 +31,8 @@ export const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), undefined], 'Passwords should match')
     .required('Confirm your password'),
   gender: Yup.string().required('Gender is required'),
-  acceptTerms: Yup.boolean().required(
+  acceptTerms: Yup.boolean().oneOf(
+    [true],
     'You must accept the terms and conditions',
   ),
   picture: Yup.mixed<FileList>()
