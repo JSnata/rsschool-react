@@ -51,45 +51,62 @@ function ControlledFormPage() {
     reader.readAsDataURL(pictureFile);
   };
 
+  const formFields = [
+    {
+      id: 'name',
+      label: 'Name',
+      type: 'text',
+      register: register('name'),
+      error: errors.name?.message,
+    },
+    {
+      id: 'age',
+      label: 'Age',
+      type: 'text',
+      register: register('age'),
+      error: errors.age?.message,
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      type: 'email',
+      register: register('email'),
+      error: errors.email?.message,
+    },
+    {
+      id: 'password',
+      label: 'Password',
+      type: 'password',
+      register: register('password'),
+      error: errors.password?.message,
+    },
+    {
+      id: 'confirmPassword',
+      label: 'Confirm Password',
+      type: 'password',
+      register: register('confirmPassword'),
+      error: errors.confirmPassword?.message,
+    },
+    {
+      id: 'country',
+      label: 'Country',
+      type: 'text',
+      register: register('country'),
+      error: errors.country?.message,
+    },
+  ];
+
   return (
     <div className={styles.formContainer}>
       <h2>Controlled Form</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.formGroup}>
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" {...register('name')} />
-          <div className={styles.ErrorMessage}>{errors.name?.message}</div>
-        </div>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="age">Age</label>
-          <input type="text" id="age" {...register('age')} />
-          <div className={styles.ErrorMessage}>{errors.age?.message}</div>
-        </div>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" {...register('email')} />
-          <div className={styles.ErrorMessage}>{errors.email?.message}</div>
-        </div>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" {...register('password')} />
-          <div className={styles.ErrorMessage}>{errors.password?.message}</div>
-        </div>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            {...register('confirmPassword')}
-          />
-          <div className={styles.ErrorMessage}>
-            {errors.confirmPassword?.message}
+        {formFields.map((field) => (
+          <div key={field.id} className={styles.formGroup}>
+            <label htmlFor={field.id}>{field.label}</label>
+            <input type={field.type} id={field.id} {...field.register} />
+            <div className={styles.errorMessage}>{field.error}</div>
           </div>
-        </div>
+        ))}
 
         <div className={styles.formGroup}>
           <label htmlFor="gender">Gender</label>
@@ -104,20 +121,15 @@ function ControlledFormPage() {
               </select>
             )}
           />
-          <div className={styles.ErrorMessage}>{errors.gender?.message}</div>
+          <div className={styles.errorMessage}>{errors.gender?.message}</div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="picture">Picture</label>
           <input type="file" id="picture" {...register('picture')} />
-          <div className={styles.ErrorMessage}>{errors.picture?.message}</div>
+          <div className={styles.errorMessage}>{errors.picture?.message}</div>
         </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="country">Country</label>
-          <input type="text" id="country" {...register('country')} />
-          <div className={styles.ErrorMessage}>{errors.country?.message}</div>
-        </div>
         <div className={`${styles.formGroup} ${styles['checkbox-container']}`}>
           <input
             type="checkbox"
@@ -126,8 +138,7 @@ function ControlledFormPage() {
           />
           <label htmlFor="acceptTerms">Accept Terms</label>
         </div>
-        <div className={styles.ErrorMessage}>{errors.acceptTerms?.message}</div>
-
+        <div className={styles.errorMessage}>{errors.acceptTerms?.message}</div>
         <button type="submit" disabled={!isValid}>
           Submit
         </button>

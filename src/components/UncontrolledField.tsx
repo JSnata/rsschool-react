@@ -35,7 +35,7 @@ const UncontrolledField = forwardRef<HTMLInputElement, InputFieldProps>(
           required={required}
           onChange={onChange}
         />
-        <div className={styles.ErrorMessage}>{error ? error : ''}</div>
+        <div className={styles.errorMessage}>{error ? error : ''}</div>
       </div>
     );
   },

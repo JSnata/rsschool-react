@@ -8,6 +8,7 @@ import UncontrolledField from '../components/UncontrolledField';
 import styles from './Form.module.css';
 
 function UncontrolledFormPage() {
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,8 +21,6 @@ function UncontrolledFormPage() {
   const acceptTermsRef = useRef<HTMLInputElement>(null);
   const pictureRef = useRef<HTMLInputElement>(null);
   const countryRef = useRef<HTMLInputElement>(null);
-
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,49 +68,72 @@ function UncontrolledFormPage() {
     }
   };
 
+  const formFields = [
+    {
+      id: 'name',
+      label: 'Name',
+      type: 'text',
+      ref: nameRef,
+      placeholder: 'Enter your name',
+      error: errors.name,
+    },
+    {
+      id: 'age',
+      label: 'Age',
+      type: 'text',
+      ref: ageRef,
+      placeholder: 'Enter your age',
+      error: errors.age,
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      type: 'email',
+      ref: emailRef,
+      placeholder: 'Enter your email',
+      error: errors.email,
+    },
+    {
+      id: 'password',
+      label: 'Password',
+      type: 'password',
+      ref: passwordRef,
+      placeholder: 'Enter your password',
+      error: errors.password,
+    },
+    {
+      id: 'confirmPassword',
+      label: 'Confirm Password',
+      type: 'password',
+      ref: confirmPasswordRef,
+      placeholder: 'Confirm your password',
+      error: errors.confirmPassword,
+    },
+    {
+      id: 'country',
+      label: 'Country',
+      type: 'text',
+      ref: countryRef,
+      placeholder: 'Enter your country',
+      error: errors.country,
+    },
+  ];
+
   return (
     <div className={styles.formContainer}>
       <h2>Uncontrolled Form</h2>
       <form onSubmit={handleSubmit}>
-        <UncontrolledField
-          id="name"
-          label="Name"
-          ref={nameRef}
-          error={errors.name}
-          placeholder="Enter your name"
-        />
-        <UncontrolledField
-          id="age"
-          label="Age"
-          type="text"
-          ref={ageRef}
-          error={errors.age}
-          placeholder="Enter your age"
-        />
-        <UncontrolledField
-          id="email"
-          label="Email"
-          type="email"
-          ref={emailRef}
-          error={errors.email}
-          placeholder="Enter your email"
-        />
-        <UncontrolledField
-          id="password"
-          label="Password"
-          type="password"
-          ref={passwordRef}
-          error={errors.password}
-          placeholder="Enter your password"
-        />
-        <UncontrolledField
-          id="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          ref={confirmPasswordRef}
-          error={errors.confirmPassword}
-          placeholder="Confirm your password"
-        />
+        {formFields.map((field) => (
+          <UncontrolledField
+            key={field.id}
+            id={field.id}
+            label={field.label}
+            type={field.type}
+            ref={field.ref}
+            placeholder={field.placeholder}
+            error={field.error}
+          />
+        ))}
 
         <div className={`${styles.formGroup}`}>
           <label htmlFor="gender">Gender</label>
@@ -120,29 +142,20 @@ function UncontrolledFormPage() {
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-          <div className={styles.ErrorMessage}>{errors.gender}</div>
+          <div className={styles.errorMessage}>{errors.gender}</div>
         </div>
 
         <div className={`${styles.formGroup} ${styles['checkbox-container']}`}>
           <input type="checkbox" id="acceptTerms" ref={acceptTermsRef} />
           <label htmlFor="acceptTerms">Accept Terms</label>
-          <div className={styles.ErrorMessage}>{errors.acceptTerms}</div>
+          <div className={styles.errorMessage}>{errors.acceptTerms}</div>
         </div>
 
         <div className={`${styles.formGroup}`}>
           <label htmlFor="picture">Picture</label>
           <input type="file" id="picture" ref={pictureRef} />
-          <div className={styles.ErrorMessage}>{errors.picture}</div>
+          <div className={styles.errorMessage}>{errors.picture}</div>
         </div>
-
-        <UncontrolledField
-          id="country"
-          label="Country"
-          ref={countryRef}
-          error={errors.country}
-          placeholder="Enter your country"
-        />
-
         <button type="submit">Submit</button>
       </form>
     </div>
