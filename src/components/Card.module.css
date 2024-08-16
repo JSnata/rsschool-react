@@ -1,4 +1,5 @@
 .card {
+  max-width: 350px;
   background-color: #ffffff;
   border: 1px solid #ccc;
   padding: 15px;
@@ -28,8 +29,8 @@
 
 @keyframes highlight {
   0% {
-    border-color: #238334;
-    background: #a0b19c;
+    border-color: #40a3c5;
+    background: #86b6c6;
   }
   100% {
     background: #fff;

@@ -1,0 +1,33 @@
+.header {
+  width: 100%;
+  background-color: #4d4d4d;
+  border-bottom: 1px #1a1a1a solid;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 50px;
+}
+
+.navLink {
+  color: #64d0ff;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #40a3c5;
+}
