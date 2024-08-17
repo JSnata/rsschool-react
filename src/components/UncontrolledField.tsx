@@ -8,6 +8,8 @@ interface InputFieldProps {
   error?: string;
   placeholder?: string;
   required?: boolean;
+  autocomplete?: 'on' | 'off' | string;
+  list?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -21,6 +23,8 @@ const UncontrolledField = forwardRef<HTMLInputElement, InputFieldProps>(
       required = false,
       error,
       onChange,
+      autocomplete = 'on',
+      list,
     },
     ref,
   ) => {
@@ -34,12 +38,15 @@ const UncontrolledField = forwardRef<HTMLInputElement, InputFieldProps>(
           placeholder={placeholder}
           required={required}
           onChange={onChange}
+          autoComplete={autocomplete}
+          list={list}
         />
         <div className={styles.errorMessage}>{error ? error : ''}</div>
       </div>
     );
   },
 );
+
 UncontrolledField.displayName = 'UncontrolledField';
 
 export default UncontrolledField;

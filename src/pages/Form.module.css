@@ -19,7 +19,8 @@
 .formContainer input[type='password'],
 .formContainer input[type='file'],
 .formContainer select,
-.formContainer textarea {
+.formContainer textarea,
+.formContainer datalist {
   width: 100%;
   padding: 8px;
   border: 1px solid #ced4da;
@@ -31,7 +32,8 @@
 .formContainer input[type='password']:focus,
 .formContainer input[type='file']:focus,
 .formContainer select:focus,
-.formContainer textarea:focus {
+.formContainer textarea:focus,
+.formContainer datalist:focus {
   border-color: #495057;
   background-color: #fff;
   outline: none;

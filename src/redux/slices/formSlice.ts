@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { StoreFormData } from '../../types/types';
+import { countries } from '../../data/countries';
 
 export interface FormState {
   formDataList: StoreFormData[];
+  countries: string[];
 }
 
 const initialState: FormState = {
   formDataList: [],
+  countries: countries,
 };
 
 const formSlice = createSlice({

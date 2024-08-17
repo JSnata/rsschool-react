@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { saveFormData } from '../redux/slices/formSlice';
 import { useNavigate } from 'react-router';
 import { validationSchema } from '../utils/validationSchema';
 import { ValidationError } from 'yup';
 import UncontrolledField from '../components/UncontrolledField';
 import styles from './Form.module.css';
+import { RootState } from '../redux/store';
 
 function UncontrolledFormPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const countries = useSelector((state: RootState) => state.form.countries);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -76,6 +78,7 @@ function UncontrolledFormPage() {
       ref: nameRef,
       placeholder: 'Enter your name',
       error: errors.name,
+      autocomplete: 'on',
     },
     {
       id: 'age',
@@ -84,6 +87,7 @@ function UncontrolledFormPage() {
       ref: ageRef,
       placeholder: 'Enter your age',
       error: errors.age,
+      autocomplete: 'off',
     },
     {
       id: 'email',
@@ -92,6 +96,7 @@ function UncontrolledFormPage() {
       ref: emailRef,
       placeholder: 'Enter your email',
       error: errors.email,
+      autocomplete: 'off',
     },
     {
       id: 'password',
@@ -100,6 +105,7 @@ function UncontrolledFormPage() {
       ref: passwordRef,
       placeholder: 'Enter your password',
       error: errors.password,
+      autocomplete: 'off',
     },
     {
       id: 'confirmPassword',
@@ -108,6 +114,7 @@ function UncontrolledFormPage() {
       ref: confirmPasswordRef,
       placeholder: 'Confirm your password',
       error: errors.confirmPassword,
+      autocomplete: 'off',
     },
     {
       id: 'country',
@@ -116,6 +123,8 @@ function UncontrolledFormPage() {
       ref: countryRef,
       placeholder: 'Enter your country',
       error: errors.country,
+      list: 'countrydata',
+      autocomplete: 'off',
     },
   ];
 
@@ -132,6 +141,8 @@ function UncontrolledFormPage() {
             ref={field.ref}
             placeholder={field.placeholder}
             error={field.error}
+            list={field.list}
+            autocomplete={field.autocomplete}
           />
         ))}
 
@@ -156,6 +167,15 @@ function UncontrolledFormPage() {
           <input type="file" id="picture" ref={pictureRef} />
           <div className={styles.errorMessage}>{errors.picture}</div>
         </div>
+
+        <datalist id="countrydata">
+          {countries &&
+            countries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+        </datalist>
         <button type="submit">Submit</button>
       </form>
     </div>

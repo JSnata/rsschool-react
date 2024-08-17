@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router';
 import { validationSchema } from '../utils/validationSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from './Form.module.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 type FormData = {
   name: string;
@@ -32,6 +34,7 @@ function ControlledFormPage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const countries = useSelector((state: RootState) => state.form.countries);
 
   const onSubmit = (data: FormData) => {
     const pictureFile = data.picture[0];
@@ -93,6 +96,8 @@ function ControlledFormPage() {
       type: 'text',
       register: register('country'),
       error: errors.country?.message,
+      list: 'countrydata',
+      autocomplete: 'off',
     },
   ];
 
@@ -103,7 +108,13 @@ function ControlledFormPage() {
         {formFields.map((field) => (
           <div key={field.id} className={styles.formGroup}>
             <label htmlFor={field.id}>{field.label}</label>
-            <input type={field.type} id={field.id} {...field.register} />
+            <input
+              type={field.type}
+              id={field.id}
+              list={field.list || undefined}
+              autoComplete={field.autocomplete}
+              {...field.register}
+            />
             <div className={styles.errorMessage}>{field.error}</div>
           </div>
         ))}
@@ -139,6 +150,13 @@ function ControlledFormPage() {
           <label htmlFor="acceptTerms">Accept Terms</label>
         </div>
         <div className={styles.errorMessage}>{errors.acceptTerms?.message}</div>
+
+        <datalist id="countrydata">
+          {countries &&
+            countries.map((country) => {
+              return <option key={country}>{country}</option>;
+            })}
+        </datalist>
         <button type="submit" disabled={!isValid}>
           Submit
         </button>
