@@ -50,6 +50,20 @@ input[type='checkbox'] {
   height: 20px;
 }
 
+.passwordIndicator {
+  color: #aaa;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.valid {
+  color: green;
+}
+
+.invalid {
+  color: #aaa;
+}
+
 .formContainer .errorMessage {
   height: 15px;
   color: #e74c3c;

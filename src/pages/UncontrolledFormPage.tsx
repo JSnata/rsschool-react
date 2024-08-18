@@ -7,12 +7,15 @@ import { ValidationError } from 'yup';
 import UncontrolledField from '../components/UncontrolledField';
 import styles from './Form.module.css';
 import { RootState } from '../redux/store';
+import { PasswordIndicator } from '../components/PasswordIndicator';
+import { usePasswordStrength } from '../customHooks/usePasswordStrength';
 
 function UncontrolledFormPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const countries = useSelector((state: RootState) => state.form.countries);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { passwordChecks, handlePasswordChange } = usePasswordStrength();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
@@ -70,81 +73,57 @@ function UncontrolledFormPage() {
     }
   };
 
-  const formFields = [
-    {
-      id: 'name',
-      label: 'Name',
-      type: 'text',
-      ref: nameRef,
-      placeholder: 'Enter your name',
-      error: errors.name,
-      autocomplete: 'on',
-    },
-    {
-      id: 'age',
-      label: 'Age',
-      type: 'text',
-      ref: ageRef,
-      placeholder: 'Enter your age',
-      error: errors.age,
-      autocomplete: 'off',
-    },
-    {
-      id: 'email',
-      label: 'Email',
-      type: 'email',
-      ref: emailRef,
-      placeholder: 'Enter your email',
-      error: errors.email,
-      autocomplete: 'off',
-    },
-    {
-      id: 'password',
-      label: 'Password',
-      type: 'password',
-      ref: passwordRef,
-      placeholder: 'Enter your password',
-      error: errors.password,
-      autocomplete: 'off',
-    },
-    {
-      id: 'confirmPassword',
-      label: 'Confirm Password',
-      type: 'password',
-      ref: confirmPasswordRef,
-      placeholder: 'Confirm your password',
-      error: errors.confirmPassword,
-      autocomplete: 'off',
-    },
-    {
-      id: 'country',
-      label: 'Country',
-      type: 'text',
-      ref: countryRef,
-      placeholder: 'Enter your country',
-      error: errors.country,
-      list: 'countrydata',
-      autocomplete: 'off',
-    },
-  ];
-
   return (
     <div className={styles.formContainer}>
       <h2>Uncontrolled Form</h2>
       <form onSubmit={handleSubmit}>
-        {formFields.map((field) => (
-          <UncontrolledField
-            key={field.id}
-            id={field.id}
-            label={field.label}
-            type={field.type}
-            ref={field.ref}
-            placeholder={field.placeholder}
-            error={field.error}
-            list={field.list}
-            autocomplete={field.autocomplete}
+        <UncontrolledField
+          id="name"
+          label="Name"
+          type="text"
+          ref={nameRef}
+          placeholder="Enter your name"
+          error={errors.name}
+        />
+        <UncontrolledField
+          id="age"
+          label="Age"
+          type="text"
+          ref={ageRef}
+          placeholder="Enter your age"
+          error={errors.age}
+        />
+        <UncontrolledField
+          id="email"
+          label="Email"
+          type="email"
+          ref={emailRef}
+          placeholder="Enter your email"
+          error={errors.email}
+        />
+
+        <div className={styles.formGroup}>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            ref={passwordRef}
+            onChange={(e) => handlePasswordChange(e.target.value)}
+            placeholder="Enter your password"
+            autoComplete="off"
           />
-        ))}
+          <PasswordIndicator passwordChecks={passwordChecks} />
+          <div className={styles.errorMessage}>{errors.password}</div>
+        </div>
+
+        <UncontrolledField
+          id="confirmPassword"
+          label="Confirm Password"
+          type="password"
+          ref={confirmPasswordRef}
+          placeholder="Confirm your password"
+          error={errors.confirmPassword}
+        />
 
         <div className={`${styles.formGroup}`}>
           <label htmlFor="gender">Gender</label>
@@ -155,6 +134,17 @@ function UncontrolledFormPage() {
           </select>
           <div className={styles.errorMessage}>{errors.gender}</div>
         </div>
+
+        <UncontrolledField
+          id="country"
+          label="Country"
+          type="text"
+          ref={countryRef}
+          placeholder="Enter your country"
+          error={errors.country}
+          list="countrydata"
+          autocomplete="off"
+        />
 
         <div className={`${styles.formGroup} ${styles['checkbox-container']}`}>
           <input type="checkbox" id="acceptTerms" ref={acceptTermsRef} />
