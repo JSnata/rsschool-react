@@ -1,0 +1,39 @@
+.card {
+  max-width: 350px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card img {
+  max-width: 200px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.cardContent p {
+  margin: 8px 0;
+}
+
+.newCard {
+  border-color: #e0ffe0;
+  background: #7caf85;
+  animation: highlight 3s ease forwards;
+}
+
+@keyframes highlight {
+  0% {
+    border-color: #40a3c5;
+    background: #86b6c6;
+  }
+  100% {
+    background: #fff;
+    border-color: #ccc;
+  }
+}
